@@ -1,25 +1,22 @@
 package com.maTK.DotO;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.imageio.*;
+import javax.swing.*;
 
 import java.awt.Graphics;
 
-import javax.swing.BorderFactory;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-
-public class DotO extends JFrame {
+public class DotO extends JPanel {
 
 	public int score;//In-game score
 	public int gold;//Amount of gold currently in bank
 	public int waveNum;//Counter of which wave the player is facing
 	public int originHP;//HP of the origin
-	
+	public int sizeX = 1280;//X size of screen
+	public int sizeY = 720; //Y size of screen
 	/**
 	 * @param args
 	 */
@@ -30,47 +27,66 @@ public class DotO extends JFrame {
 	public DotO()
 	{
 		// TODO Auto-generated method stub
-		System.out.println("It works!"); 
-		System.out.println("Josh Does MAD werk");
-		
 		//1. Create the frame.
 		JFrame frame = new JFrame("Defense Of The Origin");
 
 		//2. Optional: What happens when the frame closes?
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//3. Add Background Panel
+	    frame.getContentPane().add(new ImagePanel());
 
 		//4. Size the frame.
-		frame.setSize(1280,720);
-
-		//5. Add in Panel
-		frame.add(new GPanel());
+		frame.setSize(sizeX,sizeY);
 		
 		//6. Show it.
 		frame.setVisible(true);
-	
+		
+
 	}
 	
+  
 
 
+	public void update(Graphics g)
+	{
+		paint(g);
+	}
+ 
 }
+class ImagePanel extends JPanel 
+{
+	  private Image img;
 
-class GPanel extends JPanel {
-	public Image background;
-	
-    public GPanel() {
-		background = Toolkit.getDefaultToolkit().getImage("background.png");
-        setBorder(BorderFactory.createLineBorder(Color.black));
-    }
+	 
+	  public ImagePanel() {
+	        loadImage();  
+	        setBackground(Color.white);  
+	  }
 
-    public Dimension getPreferredSize() {
-        return new Dimension(1280,720);
-    }
+	   private void loadImage()  
+	    {  
+	        String fileName = "Background.jpg";  
+	        try  
+	        {  
+	            URL url = getClass().getResource(fileName);  
+	            img = ImageIO.read(url);  
+	        }  
+	        catch(MalformedURLException mue)  
+	        {  
+	            System.out.println("url: " + mue.getMessage());  
+	        }  
+	        catch(IOException ioe)  
+	        {  
+	            System.out.println("read: " + ioe.getMessage());  
+	        }  
+	    }
+		protected void paintComponent(Graphics g)  
+		{  
+		    super.paintComponent(g);  
+		    int w = getWidth();  
+		    int h = getHeight();  
+		    g.drawImage(img, 0, 0, w, h, this);  
+		}
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        // Draw Text
-        g.drawString("JOSHUA PLEASE TELL ME THIS WORKS!",10,20);
-        g.drawImage(background,0,0,this);
-    }  
 }
