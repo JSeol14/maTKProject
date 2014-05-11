@@ -70,7 +70,7 @@ class GPanel extends JPanel {
         super.paintComponent(g);
 
         // Draw Text
-        g.drawString("This is my custom Panel!",10,20);
+        g.drawString("JOSHUA PLEASE TELL ME THIS WORKS!",10,20);
         g.drawImage(background,0,0,this);
     }  
 }
