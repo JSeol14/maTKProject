@@ -16,6 +16,7 @@ public class DotO extends JPanel {
 
 	private final static int SIZEX = 1280;//X size of screen
 	private final static int SIZEY = 720; //Y size of screen
+	private String backgroundPath = "resources/Background.jpg";//Path to the background picture
 	public int score;//In-game score
 	public int gold;//Amount of gold currently in bank
 	public int waveNum;//Counter of which wave the player is facing
@@ -23,8 +24,6 @@ public class DotO extends JPanel {
 	public ArrayList creepWave = new ArrayList();//The Array List of all the arrays of different creeps there will be per wave
 	public Vector towers = new Vector();//The vector of all the towers active on the map
 	public Tower tempTower;//A place holder for the towers we create for the vector "tower"
-	public Image gTriangle;
-	public JPanel backgroundPanel;
 	public Image backgroundImage;
 
 	/**
@@ -41,10 +40,8 @@ public class DotO extends JPanel {
 	public DotO()
 	{
         setBorder(BorderFactory.createLineBorder(Color.black));
-		backgroundImage = loadImage("resources/Background.jpg");  
+		backgroundImage = loadImage(backgroundPath);  
 		setBackground(Color.white);
-		
-		gTriangle = loadImage("resources/Green Triangle.jpg");
 	}
 
     private static void createAndShowGUI() {
@@ -94,7 +91,6 @@ public class DotO extends JPanel {
 		int w = getWidth();  
 		int h = getHeight();
 		g.drawImage(backgroundImage, 0, 0, w, h, this);	
-		g.drawImage(gTriangle, 0,0, this);
 	}
 
 }
