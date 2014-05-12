@@ -23,7 +23,7 @@ public class DotO extends JPanel {
 	public ArrayList creepWave = new ArrayList();//The Array List of all the arrays of different creeps there will be per wave
 	public Vector towers = new Vector();//The vector of all the towers active on the map
 	public Tower tempTower;//A place holder for the towers we create for the vector "tower"
-	public ImageIcon gTraingle;
+	public Image gTriangle;
 	public JPanel backgroundPanel;
 	public Image backgroundImage;
 
@@ -35,23 +35,16 @@ public class DotO extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	createAndShowGUI();
-            	/*while (true)
-                {
-                	try
-                	{
-                		repaint();
-                		Thread.sleep(100);
-                	}
-                	catch(InterruptedException e){}
-                }*/
             }
         });
 	}
 	public DotO()
 	{
         setBorder(BorderFactory.createLineBorder(Color.black));
-		loadBackground();  
-		setBackground(Color.white);  
+		backgroundImage = loadImage("resources/Background.jpg");  
+		setBackground(Color.white);
+		
+		gTriangle = loadImage("resources/Green Triangle.jpg");
 	}
 
     private static void createAndShowGUI() {
@@ -72,13 +65,14 @@ public class DotO extends JPanel {
 	    frame.add(new DotO());
         
     }
-	private void loadBackground()  
+	private Image loadImage(String path)  
 	{  
-		String fileName = "resources/Background.jpg";  
+		String fileName = path;  
+		Image tempImage = null;
 		try  
 		{  
 			URL url = getClass().getResource(fileName);  
-			backgroundImage = ImageIO.read(url);  
+			tempImage = ImageIO.read(url);  
 		}  
 		catch(MalformedURLException mue)  
 		{  
@@ -88,22 +82,9 @@ public class DotO extends JPanel {
 		{  
 			System.out.println("read: " + ioe.getMessage());  
 		}
+		return tempImage;
 	}
 
-    protected ImageIcon createImageIcon(String path, String description) 
-    {
-    	URL imgURL;
-		imgURL = getClass().getResource(path);
-		if (imgURL != null) 
-		{
-			return new ImageIcon(imgURL, description);
-		} 
-		else 
-		{
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
-	}
 
 	@Override
 	protected void paintComponent(Graphics g)  
@@ -113,6 +94,7 @@ public class DotO extends JPanel {
 		int w = getWidth();  
 		int h = getHeight();
 		g.drawImage(backgroundImage, 0, 0, w, h, this);	
+		g.drawImage(gTriangle, 0,0, this);
 	}
 
 }
