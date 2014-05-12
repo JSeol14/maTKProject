@@ -23,6 +23,9 @@ public class DotO extends JPanel {
 	public ArrayList creepWave = new ArrayList();//The Array List of all the arrays of different creeps there will be per wave
 	public Vector towers = new Vector();//The vector of all the towers active on the map
 	public Tower tempTower;//A place holder for the towers we create for the vector "tower"
+	public ImageIcon gTraingle;
+	public JPanel backgroundPanel;
+	public Image backgroundImage;
 
 	/**
 	 * @param args
@@ -36,55 +39,103 @@ public class DotO extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	createAndShowGUI();
-                /*while (true)
+            	/*while (true)
                 {
                 	try
-                	{              
-
+                	{
                 		repaint();
                 		Thread.sleep(100);
                 	}
                 	catch(InterruptedException e){}
-                	System.out.println("Shit's working");
                 }*/
             }
         });
 	}
 
-    private static void createAndShowGUI() {
-        System.out.println("Created GUI on EDT? "+
-                SwingUtilities.isEventDispatchThread());
+    private void createAndShowGUI() {
+    	
+    	backgroundPanel = new JPanel();
+        setBorder(BorderFactory.createLineBorder(Color.black));
+		loadBackground();  
+		setBackground(Color.white);  
+
+    	
 		//1. Create the frame.
 		JFrame frame = new JFrame("Defense Of The Origin");
 
 		//2. Optional: What happens when the frame closes?
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//3. Add Background Panel
-	    frame.add(new ImagePanel());
-
 		//4. Size the frame.
 		frame.setSize(SIZEX, SIZEY);
 		
 		//5. Show it.
 		frame.setVisible(true);
+		
+		//3. Add Background Panel
+	    frame.add(backgroundPanel);
+
         
     }
+	private void loadBackground()  
+	{  
+		String fileName = "resources/Background.jpg";  
+		try  
+		{  
+			URL url = getClass().getResource(fileName);  
+			backgroundImage = ImageIO.read(url);  
+		}  
+		catch(MalformedURLException mue)  
+		{  
+			System.out.println("url: " + mue.getMessage());  
+		}  
+		catch(IOException ioe)  
+		{  
+			System.out.println("read: " + ioe.getMessage());  
+		}
+	}
+
+    protected ImageIcon createImageIcon(String path, String description) 
+    {
+    	URL imgURL;
+		imgURL = getClass().getResource(path);
+		if (imgURL != null) 
+		{
+			return new ImageIcon(imgURL, description);
+		} 
+		else 
+		{
+			System.err.println("Couldn't find file: " + path);
+			return null;
+		}
+	}
+
+	@Override
+	protected void paintComponent(Graphics g)  
+	{  
+		System.out.println("painted");
+		super.paintComponent(g);  
+		int w = getWidth();  
+		int h = getHeight();
+		g.drawImage(backgroundImage, 0, 0, w, h, this);  
+    	System.out.println("Shit's working");
+	}
+
 }
-class ImagePanel extends JPanel 
+/*class ImagePanel extends JPanel 
 {
 	private Image img;
 
 	 
 	public ImagePanel() {
         setBorder(BorderFactory.createLineBorder(Color.black));
-		loadImage();  
+		loadBackground();  
 		setBackground(Color.white);  
 	}
 
-	private void loadImage()  
+	private void loadBackground()  
 	{  
-		String fileName = "Background.jpg";  
+		String fileName = "resources/Background.jpg";  
 		try  
 		{  
 			URL url = getClass().getResource(fileName);  
@@ -97,15 +148,15 @@ class ImagePanel extends JPanel
 		catch(IOException ioe)  
 		{  
 			System.out.println("read: " + ioe.getMessage());  
-		}  
+		}
 	}
+	@Override
 	protected void paintComponent(Graphics g)  
 	{  
 		super.paintComponent(g);  
 		int w = getWidth();  
 		int h = getHeight();  
 		g.drawImage(img, 0, 0, w, h, this);  
+    	System.out.println("Shit's working");
 	}
-	
-
-}
+}*/
