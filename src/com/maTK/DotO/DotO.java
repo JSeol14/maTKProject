@@ -32,10 +32,6 @@ public class DotO extends JPanel {
 	 */
 	public static void main(String[] args) 
 	{
-		new DotO();
-	}
-	public DotO()
-	{
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
             	createAndShowGUI();
@@ -51,15 +47,15 @@ public class DotO extends JPanel {
             }
         });
 	}
-
-    private void createAndShowGUI() {
-    	
-    	backgroundPanel = new JPanel();
+	public DotO()
+	{
         setBorder(BorderFactory.createLineBorder(Color.black));
 		loadBackground();  
 		setBackground(Color.white);  
+	}
 
-    	
+    private static void createAndShowGUI() {
+    	    	
 		//1. Create the frame.
 		JFrame frame = new JFrame("Defense Of The Origin");
 
@@ -73,8 +69,7 @@ public class DotO extends JPanel {
 		frame.setVisible(true);
 		
 		//3. Add Background Panel
-	    frame.add(backgroundPanel);
-
+	    frame.add(new DotO());
         
     }
 	private void loadBackground()  
@@ -117,46 +112,6 @@ public class DotO extends JPanel {
 		super.paintComponent(g);  
 		int w = getWidth();  
 		int h = getHeight();
-		g.drawImage(backgroundImage, 0, 0, w, h, this);  
-    	System.out.println("Shit's working");
-	}
+		g.drawImage(backgroundImage, 0, 0, w, h, this);	}
 
 }
-/*class ImagePanel extends JPanel 
-{
-	private Image img;
-
-	 
-	public ImagePanel() {
-        setBorder(BorderFactory.createLineBorder(Color.black));
-		loadBackground();  
-		setBackground(Color.white);  
-	}
-
-	private void loadBackground()  
-	{  
-		String fileName = "resources/Background.jpg";  
-		try  
-		{  
-			URL url = getClass().getResource(fileName);  
-			img = ImageIO.read(url);  
-		}  
-		catch(MalformedURLException mue)  
-		{  
-			System.out.println("url: " + mue.getMessage());  
-		}  
-		catch(IOException ioe)  
-		{  
-			System.out.println("read: " + ioe.getMessage());  
-		}
-	}
-	@Override
-	protected void paintComponent(Graphics g)  
-	{  
-		super.paintComponent(g);  
-		int w = getWidth();  
-		int h = getHeight();  
-		g.drawImage(img, 0, 0, w, h, this);  
-    	System.out.println("Shit's working");
-	}
-}*/
