@@ -3,20 +3,27 @@ package com.maTK.DotO;
 import javax.imageio.*;
 import javax.swing.*;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class DotO extends JPanel {
 
+	private final static int SIZEX = 1280;//X size of screen
+	private final static int SIZEY = 720; //Y size of screen
 	public int score;//In-game score
 	public int gold;//Amount of gold currently in bank
 	public int waveNum;//Counter of which wave the player is facing
 	public int originHP;//HP of the origin
-	public int sizeX = 1280;//X size of screen
-	public int sizeY = 720; //Y size of screen
+	public ArrayList creepWave = new ArrayList();//The Array List of all the arrays of different creeps there will be per wave
+	public Vector towers = new Vector();//The vector of all the towers active on the map
+	public Tower tempTower;//A place holder for the towers we create for the vector "tower"
+
 	/**
 	 * @param args
 	 */
@@ -26,7 +33,27 @@ public class DotO extends JPanel {
 	}
 	public DotO()
 	{
-		// TODO Auto-generated method stub
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	createAndShowGUI();
+                /*while (true)
+                {
+                	try
+                	{              
+
+                		repaint();
+                		Thread.sleep(100);
+                	}
+                	catch(InterruptedException e){}
+                	System.out.println("Shit's working");
+                }*/
+            }
+        });
+	}
+
+    private static void createAndShowGUI() {
+        System.out.println("Created GUI on EDT? "+
+                SwingUtilities.isEventDispatchThread());
 		//1. Create the frame.
 		JFrame frame = new JFrame("Defense Of The Origin");
 
@@ -34,59 +61,51 @@ public class DotO extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//3. Add Background Panel
-	    frame.getContentPane().add(new ImagePanel());
+	    frame.add(new ImagePanel());
 
 		//4. Size the frame.
-		frame.setSize(sizeX,sizeY);
+		frame.setSize(SIZEX, SIZEY);
 		
-		//6. Show it.
+		//5. Show it.
 		frame.setVisible(true);
-		
-
-	}
-	
-  
-
-
-	public void update(Graphics g)
-	{
-		paint(g);
-	}
- 
+        
+    }
 }
 class ImagePanel extends JPanel 
 {
-	  private Image img;
+	private Image img;
 
 	 
-	  public ImagePanel() {
-	        loadImage();  
-	        setBackground(Color.white);  
-	  }
+	public ImagePanel() {
+        setBorder(BorderFactory.createLineBorder(Color.black));
+		loadImage();  
+		setBackground(Color.white);  
+	}
 
-	   private void loadImage()  
-	    {  
-	        String fileName = "Background.jpg";  
-	        try  
-	        {  
-	            URL url = getClass().getResource(fileName);  
-	            img = ImageIO.read(url);  
-	        }  
-	        catch(MalformedURLException mue)  
-	        {  
-	            System.out.println("url: " + mue.getMessage());  
-	        }  
-	        catch(IOException ioe)  
-	        {  
-	            System.out.println("read: " + ioe.getMessage());  
-	        }  
-	    }
-		protected void paintComponent(Graphics g)  
+	private void loadImage()  
+	{  
+		String fileName = "Background.jpg";  
+		try  
 		{  
-		    super.paintComponent(g);  
-		    int w = getWidth();  
-		    int h = getHeight();  
-		    g.drawImage(img, 0, 0, w, h, this);  
-		}
+			URL url = getClass().getResource(fileName);  
+			img = ImageIO.read(url);  
+		}  
+		catch(MalformedURLException mue)  
+		{  
+			System.out.println("url: " + mue.getMessage());  
+		}  
+		catch(IOException ioe)  
+		{  
+			System.out.println("read: " + ioe.getMessage());  
+		}  
+	}
+	protected void paintComponent(Graphics g)  
+	{  
+		super.paintComponent(g);  
+		int w = getWidth();  
+		int h = getHeight();  
+		g.drawImage(img, 0, 0, w, h, this);  
+	}
+	
 
 }
