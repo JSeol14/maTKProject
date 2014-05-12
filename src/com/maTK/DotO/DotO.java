@@ -74,7 +74,7 @@ public class DotO extends JPanel {
     }
 	private void loadBackground()  
 	{  
-		String fileName = "resources/Background.jpg";  
+		String fileName = "resources/Background.png";  
 		try  
 		{  
 			URL url = getClass().getResource(fileName);  
