@@ -112,6 +112,7 @@ public class DotO extends JPanel {
 		super.paintComponent(g);  
 		int w = getWidth();  
 		int h = getHeight();
-		g.drawImage(backgroundImage, 0, 0, w, h, this);	}
+		g.drawImage(backgroundImage, 0, 0, w, h, this);	
+	}
 
 }
