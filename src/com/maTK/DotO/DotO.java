@@ -16,7 +16,7 @@ public class DotO extends JPanel {
 
 	private final static int SIZEX = 1280;//X size of screen
 	private final static int SIZEY = 720; //Y size of screen
-	private String backgroundPath = "resources/Background.jpg";//Path to the background picture
+	private String backgroundPath = "resources/Background.png";//Path to the background picture
 	public int score;//In-game score
 	public int gold;//Amount of gold currently in bank
 	public int waveNum;//Counter of which wave the player is facing
