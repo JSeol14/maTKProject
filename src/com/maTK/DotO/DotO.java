@@ -19,12 +19,13 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 
 	private final static int SIZEX = 1280;//X size of screen
 	private final static int SIZEY = 720; //Y size of screen
-	private final static int TOWERX = 924;
-	private final static int TOWERY = 68;
+	private final static double TOWERX = (932/(double)SIZEX);
+	private final static double TOWERY = (68/(double)SIZEY);
 	
 	private String backgroundPath = "resources/Background.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
-	private String towerSpritePath = "resources/TowerSprite.png";
+	private String towerSpriteImagePath = "resources/TowerSprite.png";
 	private String openingScreenPath = "resources/OpeningScreen.png";
+	private String animationSpritePath = "resources/AnimationSprite.png";
 	
 	private boolean gameStarted = false;
 	
@@ -39,7 +40,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	
 	private Image openingScreenImage;
 	private Image backgroundImage;
-	private Image towerSprite;
+	private Image towerSpriteImage;
+	private Image animationSpriteImage;
 	
 
 	/**
@@ -58,7 +60,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         setBorder(BorderFactory.createLineBorder(Color.black));
         openingScreenImage = loadImage(openingScreenPath);
 		backgroundImage = loadImage(backgroundPath);  
-		towerSprite = loadImage(towerSpritePath);
+		towerSpriteImage = loadImage(towerSpriteImagePath);
+		animationSpriteImage = loadImage(animationSpritePath);
 		setBackground(Color.white);
 	    addMouseListener(this);
 	}
@@ -117,6 +120,27 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		if(gameStarted)
 		{
 			g.drawImage(backgroundImage, 0, 0, w, h, this);	
+			g.drawImage(towerSpriteImage, (int)((TOWERX)*w),(int)((TOWERY)*h),(int)(w-((TOWERX)*w)),(int)(h-((TOWERY)*h)),this);
+			
+			while(true)
+			{
+				g.drawImage(backgroundImage, 0, 0, w, h, this);	
+				g.drawImage(animationSpriteImage, 100,100,200,200,0,0,100,100,this);
+				try {
+					Thread.sleep(100); 
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				g.drawImage(backgroundImage, 0, 0, w, h, this);	
+				g.drawImage(animationSpriteImage, 100,100,200,200,100,0,200,100,this);
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	@Override
@@ -141,7 +165,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         if(!gameStarted)
         {
         	gameStarted = true;
-        	System.out.println("Started");
         	repaint();
         }
 	}
