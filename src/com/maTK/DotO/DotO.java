@@ -21,6 +21,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private final static int SIZEY = 720; //Y size of screen
 	private final static double TOWERX = (932/(double)SIZEX);
 	private final static double TOWERY = (68/(double)SIZEY);
+	private final static int SPRITEX = 100;
+	private final static int SPRITEY = 100;
 	
 	private String backgroundPath = "resources/Background.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
 	private String towerSpriteImagePath = "resources/TowerSprite.png";
@@ -121,8 +123,23 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		{
 			g.drawImage(backgroundImage, 0, 0, w, h, this);	
 			g.drawImage(towerSpriteImage, (int)((TOWERX)*w),(int)((TOWERY)*h),(int)(w-((TOWERX)*w)),(int)(h-((TOWERY)*h)),this);
-			
-			while(true)
+
+			/*for(int k=0; k<3; k++)
+			{
+				int j=0;
+				g.drawImage(towerSpriteImage, (int)(((TOWERX*w)+((w-(TOWERX*w))/3)*k)+((w-(TOWERX*w))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*j),(int)((((TOWERX*w)+((w-(TOWERX*w))/3)*k)+2*((w-(TOWERX*w)))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*(j+1)),SPRITEX*0,SPRITEY*k,SPRITEX*1,SPRITEY*(k+1),this);
+			}
+			for(int k=3; k<6; k++)
+			{
+				int j=1;
+				g.drawImage(towerSpriteImage, (int)(((TOWERX*w)+((w-(TOWERX*w))/3)*k)+((w-(TOWERX*w))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*j),(int)((((TOWERX*w)+((w-(TOWERX*w))/3)*k)+2*((w-(TOWERX*w)))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*(j+1)),SPRITEX*0,SPRITEY*k,SPRITEX*1,SPRITEY*(k+1),this);
+			}
+			for(int k=6; k<9; k++)
+			{
+				int j=2;
+				g.drawImage(towerSpriteImage, (int)(((TOWERX*w)+((w-(TOWERX*w))/3)*k)+((w-(TOWERX*w))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*j),(int)((((TOWERX*w)+((w-(TOWERX*w))/3)*k)+2*((w-(TOWERX*w)))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*(j+1)),SPRITEX*0,SPRITEY*k,SPRITEX*1,SPRITEY*(k+1),this);
+			}*/
+			/*while(true)
 			{
 				g.drawImage(backgroundImage, 0, 0, w, h, this);	
 				g.drawImage(animationSpriteImage, 100,100,200,200,0,0,100,100,this);
@@ -140,7 +157,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}
 	}
 	@Override
