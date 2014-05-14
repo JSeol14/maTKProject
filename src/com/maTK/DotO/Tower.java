@@ -7,18 +7,14 @@ public class Tower {
 	public int damage;//tower's damage
 	public int xpos;//x position of the tower
 	public int ypos;//y position of the tower
-	public int width;//width of tower
-	public int height;//height of tower
 	public int upPrice;//cost to upgrade	
 	public int sellPrice;//money from selling
 	public boolean isAlive;//alive or not
 	
-	public Tower (int initX, int initY, int w, int h, int t, int l)
+	public Tower (int initX, int initY, int t, int l)
 	{
 		xpos = initX;
 		ypos = initY;
-		width = w;
-		height = h;
 		type = t;
 		level = l;
 	}
