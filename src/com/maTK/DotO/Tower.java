@@ -11,7 +11,7 @@ public class Tower {
 	public int height;//height of tower
 	public int upPrice;//cost to upgrade	
 	public int sellPrice;//money from selling
-	public boolean isAlive;
+	public boolean isAlive;//alive or not
 	
 	public Tower (int initX, int initY, int w, int h, int t, int l)
 	{
