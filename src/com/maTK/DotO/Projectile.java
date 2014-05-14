@@ -9,6 +9,7 @@ public class Projectile {
 	public int extraGold = 0;//extra gold from creep kill
 	public int extraRange = 0;//extra range of tower
 	public int poisonDmg = 0;//Poison dps
+	public double poisonTime = 0;//duration of poison
 	public double slowPercent = 1;//slow effect, multiplier for creep speed
 	public double slowTime = 0;//duration of slow
 	public int freezeChance = 0;//percent chance of freeze (0-100)
@@ -43,9 +44,10 @@ public class Projectile {
 		extraRange = range;
 	}
 	
-	public void setPoision(int poison)
+	public void setPoision(int poison, double poisonDur)
 	{
 		poisonDmg = poison;
+		poisonTime = poisonDur;
 	}
 	
 	public void setSlow(double slow, double slowDur)
