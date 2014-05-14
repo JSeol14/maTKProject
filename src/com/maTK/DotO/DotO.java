@@ -37,7 +37,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private int originHP;//HP of the origin
 	
 	private ArrayList creepWave = new ArrayList();//The Array List of all the arrays of different creeps there will be per wave
-	private Vector towers = new Vector();//The vector of all the towers active on the map
+	private ArrayList towers = new ArrayList();//The vector of all the towers active on the map
 	private Tower tempTower;//A place holder for the towers we create for the vector "tower"
 	
 	private Image openingScreenImage;
@@ -45,6 +45,11 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image towerSpriteImage;
 	private Image animationSpriteImage;
 	
+	/*
+	 * Tower.type is an integer symbolizing all the different colors
+	 * 
+	 * 0: Red, 1: Orange, 2: Yellow, 3: Green, 4: Teal, 5: Purple, 6: Pink, 7: Grey, 8: Black
+	 */
 
 	/**
 	 * @param args
@@ -106,7 +111,14 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		return tempImage;
 	}
 
-
+	private void createTower(int type, int xpos, int ypos)
+	{
+		if(gameStarted)
+		{
+			
+		}
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g)  
 	{  
@@ -123,41 +135,14 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		{
 			g.drawImage(backgroundImage, 0, 0, w, h, this);	
 			//g.drawImage(towerSpriteImage, (int)((TOWERX)*w),(int)((TOWERY)*h),(int)(w-((TOWERX)*w)),(int)(h-((TOWERY)*h)),this);
-
-			for(int k=0; k<3; k++)
+			
+			for(int j=0; j<3; j++)
 			{
-				int j=0;
-				g.drawImage(towerSpriteImage, (int)(((TOWERX*w)+((w-(TOWERX*w))/3)*k)+((w-(TOWERX*w))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*j),(int)((((TOWERX*w)+((w-(TOWERX*w))/3)*k)+2*((w-(TOWERX*w)))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*(j+1)),SPRITEX*0,SPRITEY*k,SPRITEX*1,SPRITEY*(k+1),this);
-			}
-			/*for(int k=3; k<6; k++)
-			{
-				int j=1;
-				g.drawImage(towerSpriteImage, (int)(((TOWERX*w)+((w-(TOWERX*w))/3)*k)+((w-(TOWERX*w))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*j),(int)((((TOWERX*w)+((w-(TOWERX*w))/3)*k)+2*((w-(TOWERX*w)))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*(j+1)),SPRITEX*0,SPRITEY*k,SPRITEX*1,SPRITEY*(k+1),this);
-			}
-			for(int k=6; k<9; k++)
-			{
-				int j=2;
-				g.drawImage(towerSpriteImage, (int)(((TOWERX*w)+((w-(TOWERX*w))/3)*k)+((w-(TOWERX*w))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*j),(int)((((TOWERX*w)+((w-(TOWERX*w))/3)*k)+2*((w-(TOWERX*w)))/6)),(int)((TOWERY*h)+((h-(TOWERY*h))/3)*(j+1)),SPRITEX*0,SPRITEY*k,SPRITEX*1,SPRITEY*(k+1),this);
-			}*/
-			/*while(true)
-			{
-				g.drawImage(backgroundImage, 0, 0, w, h, this);	
-				g.drawImage(animationSpriteImage, 100,100,200,200,0,0,100,100,this);
-				try {
-					Thread.sleep(100); 
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				for(int k=0; k<3; k++)
+				{
+					g.drawImage(towerSpriteImage, (int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j+2)+((h-(TOWERY*h))/36)),SPRITEX*0,(SPRITEY*(3*j))+(SPRITEY*k),SPRITEX*1,(SPRITEY*(3*j))+(SPRITEY*(k+1)),this);
 				}
-				g.drawImage(backgroundImage, 0, 0, w, h, this);	
-				g.drawImage(animationSpriteImage, 100,100,200,200,100,0,200,100,this);
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}*/
+			}
 		}
 	}
 	@Override
