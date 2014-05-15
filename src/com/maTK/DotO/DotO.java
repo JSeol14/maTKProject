@@ -31,8 +31,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private String animationSpritePath = "resources/AnimationSprite.png";
 	
 	private boolean gameStarted = false;
-	//private boolean[] recSelected = new boolean[9];
-	private boolean clickedTower = false;
 	
 	private static int towerSizeX; 
 	private static int towerSizeY;
@@ -201,7 +199,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
     	        pointClicked = new Point(xvar,yvar);
     			createTower(recSelected,(int)(((double)pointClicked.x/(double)SIZEX)*(double)w),pointClicked.y);
     			recSelected = -1;
-    			clickedTower = false;
     		}
         	for(int i=0; i<towerRec.length; i++)
         	{
