@@ -31,6 +31,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private String animationSpritePath = "resources/AnimationSprite.png";
 	
 	private boolean gameStarted = false;
+	private boolean[] recSelected = new boolean[9];
+	private boolean clickedTower = false;
 	
 	private static int towerSizeX; 
 	private static int towerSizeY;
@@ -49,16 +51,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image towerSpriteImage;
 	private Image animationSpriteImage;
 	
-	private Rectangle redTriangleRec;
-	private Rectangle orangeTriangleRec;
-	private Rectangle yellowTriangleRec;
-	private Rectangle greenTriangleRec;
-	private Rectangle blueTriangleRec;
-	private Rectangle purpleTriangleRec;
-	private Rectangle pinkTriangleRec;
-	private Rectangle greyTriangleRec;
-	private Rectangle blackTriangleRec;
-
+	private Rectangle[] towerRec = new Rectangle[9];
 	
 	/*
 	 * Tower.type is an integer symbolizing all the different colors
@@ -132,7 +125,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		{
 			tempTower = new Tower(xpos,ypos,type,0);
 			towers.add(tempTower);
-			System.out.println("Tower added");
+			System.out.println("Tower added at x: "+xpos+", y:"+ypos);
 		}
 	}
 	
@@ -144,17 +137,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		int h = getHeight();
 		towerSizeX = (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)) - (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(1));
 		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
-		redTriangleRec = new Rectangle((int)((TOWERX*w)+((w-(TOWERX*w))/10)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)));
-		/*orangeTriangleRec;
-		yellowTriangleRec;
-		greenTriangleRec;
-		blueTriangleRec;
-		purpleTriangleRec;
-		pinkTriangleRec;
-		greyTriangleRec;
-		blackTriangleRec;*/
-		g.setColor(Color.BLACK);
-		g.fillRect((int)((TOWERX*w)+((w-(TOWERX*w))/10)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)));
 		
 		if(!gameStarted)
 		{
@@ -169,6 +151,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				for(int k=0; k<3; k++)
 				{
 					g.drawImage(towerSpriteImage, (int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j+2)+((h-(TOWERY*h))/36)),SPRITEX*0,(SPRITEY*(3*j))+(SPRITEY*k),SPRITEX*1,(SPRITEY*(3*j))+(SPRITEY*(k+1)),this);
+					
+					towerRec[3*j+k] = new Rectangle ((int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),towerSizeX,towerSizeY);
 				}
 			}
 			
@@ -200,15 +184,45 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		// TODO Auto-generated method stub
 		int xvar;
 		int yvar;
-        xvar = arg0.getX();
-        yvar = arg0.getY();
-        System.out.println("x: "+xvar+" y: "+yvar);
+		int w = getWidth();
+		int h = getHeight();
+		Point pointClicked;
         
+		xvar = arg0.getX();
+        yvar = arg0.getY();
+        pointClicked = new Point(xvar,yvar);
+        
+        
+        if(gameStarted)
+        {
+        	for(int i=0; i<recSelected.length; i++)
+        	{
+        		if(recSelected[i]&&clickedTower&&(xvar<TOWERX*w))
+        		{
+        	        pointClicked = new Point(xvar,yvar);
+        			createTower(i,pointClicked.x,pointClicked.y);
+        			clickedTower = false;
+        		}
+        	}
+        	for(int i=0; i<towerRec.length; i++)
+        	{
+        		if(towerRec[i].contains(pointClicked))
+        		{
+                	for(int j=0; j<recSelected.length; j++)
+                	{
+                		recSelected[j] = false;
+                	}
+                	recSelected[i] = true;
+                	clickedTower = true;
+        		}
+        	}
+        }       
         if(!gameStarted)
         {
         	gameStarted = true;
-        	repaint();
         }
+
+        repaint();
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
