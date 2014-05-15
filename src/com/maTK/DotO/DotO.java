@@ -24,6 +24,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private final static int SPRITEX = 100;
 	private final static int SPRITEY = 100;
 	
+	
 	private String backgroundPath = "resources/Background.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
 	private String towerSpriteImagePath = "resources/TowerSprite.png";
 	private String openingScreenPath = "resources/OpeningScreen.png";
@@ -31,13 +32,16 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	
 	private boolean gameStarted = false;
 	
+	private static int towerSizeX; 
+	private static int towerSizeY;
+	
 	private int score;//In-game score
 	private int gold;//Amount of gold currently in bank
 	private int waveNum;//Counter of which wave the player is facing
 	private int originHP;//HP of the origin
 	
-	private ArrayList creepWave = new ArrayList();//The Array List of all the arrays of different creeps there will be per wave
-	private ArrayList towers = new ArrayList();//The vector of all the towers active on the map
+	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
+	private ArrayList<Tower> towers = new ArrayList<Tower>();//The vector of all the towers active on the map
 	private Tower tempTower;//A place holder for the towers we create for the vector "tower"
 	
 	private Image openingScreenImage;
@@ -115,7 +119,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	{
 		if(gameStarted)
 		{
-			
+			tempTower = new Tower(xpos,ypos,type,0);
+			towers.add(tempTower);
 		}
 	}
 	
@@ -125,6 +130,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		super.paintComponent(g);  
 		int w = getWidth();  
 		int h = getHeight();
+		towerSizeX = (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)) - (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(1));
+		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
+
 		
 		if(!gameStarted)
 		{
@@ -133,14 +141,21 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		
 		if(gameStarted)
 		{
-			g.drawImage(backgroundImage, 0, 0, w, h, this);	
-			//g.drawImage(towerSpriteImage, (int)((TOWERX)*w),(int)((TOWERY)*h),(int)(w-((TOWERX)*w)),(int)(h-((TOWERY)*h)),this);
-			
+			g.drawImage(backgroundImage, 0, 0, w, h, this);				
 			for(int j=0; j<3; j++)
 			{
 				for(int k=0; k<3; k++)
 				{
 					g.drawImage(towerSpriteImage, (int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j+2)+((h-(TOWERY*h))/36)),SPRITEX*0,(SPRITEY*(3*j))+(SPRITEY*k),SPRITEX*1,(SPRITEY*(3*j))+(SPRITEY*(k+1)),this);
+				}
+			}
+			
+			for(int i=0; i<towers.size();i++)
+			{
+				tempTower = towers.get(i);
+				if(tempTower.isAlive)
+				{
+					g.drawImage(towerSpriteImage, tempTower.xpos*w, tempTower.ypos*h, (tempTower.xpos*w)+towerSizeX,(tempTower.ypos*h)+towerSizeY, 0, tempTower.type*SIZEY, SIZEX, (tempTower.type+1)*SIZEY,this);
 				}
 			}
 		}
@@ -169,6 +184,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         	gameStarted = true;
         	repaint();
         }
+        createTower(2,20,20);
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
