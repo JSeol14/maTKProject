@@ -31,7 +31,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private String animationSpritePath = "resources/AnimationSprite.png";
 	
 	private boolean gameStarted = false;
-	private boolean[] recSelected = new boolean[9];
+	//private boolean[] recSelected = new boolean[9];
 	private boolean clickedTower = false;
 	
 	private static int towerSizeX; 
@@ -41,6 +41,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private int gold;//Amount of gold currently in bank
 	private int waveNum;//Counter of which wave the player is facing
 	private int originHP;//HP of the origin
+	private int recSelected = -1;
 	
 	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
 	private ArrayList<Tower> towers = new ArrayList<Tower>();//The vector of all the towers active on the map
@@ -195,25 +196,18 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         
         if(gameStarted)
         {
-        	for(int i=0; i<recSelected.length; i++)
-        	{
-        		if(recSelected[i]&&clickedTower&&(xvar<TOWERX*w))
-        		{
-        	        pointClicked = new Point(xvar,yvar);
-        			createTower(i,pointClicked.x,pointClicked.y);
-        			clickedTower = false;
-        		}
-        	}
+    		if(recSelected!=-1&&(xvar<TOWERX*w))
+    		{
+    	        pointClicked = new Point(xvar,yvar);
+    			createTower(recSelected,(int)(((double)pointClicked.x/(double)SIZEX)*(double)w),pointClicked.y);
+    			recSelected = -1;
+    			clickedTower = false;
+    		}
         	for(int i=0; i<towerRec.length; i++)
         	{
         		if(towerRec[i].contains(pointClicked))
         		{
-                	for(int j=0; j<recSelected.length; j++)
-                	{
-                		recSelected[j] = false;
-                	}
-                	recSelected[i] = true;
-                	clickedTower = true;
+                	recSelected = i;
         		}
         	}
         }       
