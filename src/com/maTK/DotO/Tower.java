@@ -17,6 +17,7 @@ public class Tower {
 		ypos = initY;
 		type = t;
 		level = l;
+		isAlive = true;
 	}
 	
 	public void upgrade()//Upgrades tower to next level

@@ -49,10 +49,21 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image towerSpriteImage;
 	private Image animationSpriteImage;
 	
+	private Rectangle redTriangleRec;
+	private Rectangle orangeTriangleRec;
+	private Rectangle yellowTriangleRec;
+	private Rectangle greenTriangleRec;
+	private Rectangle blueTriangleRec;
+	private Rectangle purpleTriangleRec;
+	private Rectangle pinkTriangleRec;
+	private Rectangle greyTriangleRec;
+	private Rectangle blackTriangleRec;
+
+	
 	/*
 	 * Tower.type is an integer symbolizing all the different colors
 	 * 
-	 * 0: Red, 1: Orange, 2: Yellow, 3: Green, 4: Teal, 5: Purple, 6: Pink, 7: Grey, 8: Black
+	 * 0: Red, 1: Orange, 2: Yellow, 3: Green, 4: Blue, 5: Purple, 6: Pink, 7: Grey, 8: Black
 	 */
 
 	/**
@@ -121,6 +132,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		{
 			tempTower = new Tower(xpos,ypos,type,0);
 			towers.add(tempTower);
+			System.out.println("Tower added");
 		}
 	}
 	
@@ -132,7 +144,17 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		int h = getHeight();
 		towerSizeX = (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)) - (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(1));
 		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
-
+		redTriangleRec = new Rectangle((int)((TOWERX*w)+((w-(TOWERX*w))/10)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)));
+		/*orangeTriangleRec;
+		yellowTriangleRec;
+		greenTriangleRec;
+		blueTriangleRec;
+		purpleTriangleRec;
+		pinkTriangleRec;
+		greyTriangleRec;
+		blackTriangleRec;*/
+		g.setColor(Color.BLACK);
+		g.fillRect((int)((TOWERX*w)+((w-(TOWERX*w))/10)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)));
 		
 		if(!gameStarted)
 		{
@@ -155,7 +177,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				tempTower = towers.get(i);
 				if(tempTower.isAlive)
 				{
-					g.drawImage(towerSpriteImage, tempTower.xpos*w, tempTower.ypos*h, (tempTower.xpos*w)+towerSizeX,(tempTower.ypos*h)+towerSizeY, 0, tempTower.type*SIZEY, SIZEX, (tempTower.type+1)*SIZEY,this);
+					//g.drawImage(towerSpriteImage, 20, 20, 20+towerSizeX,20+towerSizeY, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
+					double tempXpos = tempTower.xpos/(double)SIZEX;
+					double tempYpos = tempTower.ypos/(double)SIZEY;
+					g.drawImage(towerSpriteImage, (int)(tempXpos*w), (int)(tempYpos*h), (int)((tempXpos)*w)+towerSizeX,(int)((tempYpos)*h)+towerSizeY, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
 				}
 			}
 		}
@@ -184,7 +209,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         	gameStarted = true;
         	repaint();
         }
-        createTower(2,20,20);
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
