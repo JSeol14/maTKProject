@@ -3,10 +3,10 @@ package com.maTK.DotO;
 import java.awt.Point;
 import java.util.ArrayList;
 
-public class Path {
+public class Road {
 	public ArrayList points;
 	
-	public Path()
+	public Road()
 	{
 		
 	}

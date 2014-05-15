@@ -20,7 +20,7 @@ public class Creep {
 	public boolean isAlive;//Creep's alive/dead status
 	public int goldNum;//Amount of gold received for creep kill
 	public int dmg;//dmg/lives taken away when creep attacks the Origin
-	public Path path;//path of travel
+	public Road path;//path of travel
 	public int pathNum = 0;//number of which point the creep is on
 	public Point nextPoint;//nextPoint on path
 	
@@ -33,7 +33,7 @@ public class Creep {
 		goldNum = gold;
 	}
 	
-	public void addPath(Path p)
+	public void addPath(Road p)
 	{
 		path = p;//set Path
 		Point temp = ((Point) path.points.get(0));//get first point
