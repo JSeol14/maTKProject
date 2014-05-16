@@ -27,6 +27,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private String towerSpriteImagePath2 = "resources/TowerSheetTransparent.png";
 	private String openingScreenPath = "resources/OpeningScreen.png";
 	private String animationSpritePath = "resources/AnimationSprite.png";
+	private String rangeSpritePath = "resources/RangeIndicator.png";
 	
 	private boolean gameStarted = false;
 	
@@ -50,6 +51,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image towerSpriteImage;
 	private Image towerSpriteImage2;
 	private Image creepSpriteImage;
+	private Image rangeIndicatorImage;
 	
 	private Creep[] testCreep = new Creep[4];
 	private int counter=0;
@@ -85,6 +87,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		towerSpriteImage = loadImage(towerSpriteImagePath);
 		towerSpriteImage2 = loadImage(towerSpriteImagePath2);
 		creepSpriteImage = loadImage(animationSpritePath);
+		rangeIndicatorImage = loadImage(rangeSpritePath);
 		setBackground(Color.white);
 	    addMouseListener(this);
 	    addMouseMotionListener(this);
@@ -130,7 +133,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	{
 		if(gameStarted)
 		{
-			tempTower = new Tower(xpos,ypos,type,0);
+			tempTower = new Tower(xpos,ypos,type,0, 300);
 			towers.add(tempTower);
 			System.out.println("Tower added at x: "+xpos+", y:"+ypos);
 		}
@@ -181,9 +184,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 
 			if(recSelected!=-1)
 			{		
-				double tempXpos = placeTower.xpos/(double)SIZEX;
-				double tempYpos = placeTower.ypos/(double)SIZEY;
-				g.drawImage(towerSpriteImage2, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, placeTower.type*SPRITEY, SPRITEX, (placeTower.type+1)*SPRITEY,this);
+				double tempXpos = placeTower.xpos;
+				double tempYpos = placeTower.ypos;
+				g.drawImage(towerSpriteImage2, (int)(tempXpos)-towerSizeX/2, (int)(tempYpos)-towerSizeY/2, (int)(tempXpos)+towerSizeX/2,(int)(tempYpos)+towerSizeY/2, 0, placeTower.type*SPRITEY, SPRITEX, (placeTower.type+1)*SPRITEY,this);
+				g.drawImage(rangeIndicatorImage, (int)(tempXpos)-placeTower.range/2, (int)(tempYpos)-placeTower.range/2, (int)(tempXpos)+placeTower.range/2,(int)(tempYpos)+placeTower.range/2, 0, 0, 1000, 1000,this);
 			}
 			
 			for(int i=0; i<roads.size(); i++)
@@ -193,7 +197,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				{
 					Point p = tRoad.points.get(a);
 					g.setColor(Color.red);
-					g.fillRect(p.x, p.y, 3, 3);
+					g.fillRect((int)((double)p.x/(double)SIZEX*(double)w), (int)((double)p.y/(double)SIZEY*(double)h), 3, 3);
 				}
 			}
 		    for(int i=0; i<testCreep.length; i++)
@@ -208,8 +212,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		    	{
 		    		animTemp = 100;
 		    	}
+		    	/*
 				g.setColor(Color.blue);
-				g.fillRect(testCreep[i].xpos, testCreep[i].ypos, 3, 3);
+				g.fillRect((int)((double)testCreep[i].xpos/(double)SIZEX*(double)w), (int)((double)testCreep[i].ypos/(double)SIZEY*(double)h), 3, 3);
+				*/
 				testCreep[i].move();
 				double tempXpos = testCreep[i].xpos/(double)SIZEX;
 				double tempYpos = testCreep[i].ypos/(double)SIZEY;
@@ -261,7 +267,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         
         if(gameStarted)
         {
-    		if(recSelected!=-1&&(xvar<TOWERX*w - towerSizeX/2))
+    		if(recSelected!=-1&&(xvar<TOWERX*w))
     		{
     			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
     			recSelected = -1;
@@ -274,7 +280,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         	{
         		if(towerRec[i].contains(pointClicked))
         		{
-        			placeTower = new Tower(xvar,yvar,i,0);
+        			placeTower = new Tower(xvar,yvar,i,0, 300);
                 	recSelected = i;
         		}
         	}

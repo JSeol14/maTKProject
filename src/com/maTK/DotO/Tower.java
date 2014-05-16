@@ -11,12 +11,13 @@ public class Tower {
 	public int sellPrice;//money from selling
 	public boolean isAlive;//alive or not
 	
-	public Tower (int initX, int initY, int t, int l)
+	public Tower (int initX, int initY, int t, int l, int r)
 	{
 		xpos = initX;
 		ypos = initY;
 		type = t;
 		level = l;
+		range = r;
 		isAlive = true;
 	}
 	
