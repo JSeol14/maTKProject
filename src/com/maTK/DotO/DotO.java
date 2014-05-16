@@ -273,13 +273,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		Point pointClicked;
         
 		xvar = arg0.getX();
-<<<<<<< HEAD
         yvar = arg0.getY();
-=======
         yvar = arg0.getY();
         System.out.println("x "+xvar+" y "+yvar);
         //System.out.println("x: " + xvar + ", y: " + yvar);
->>>>>>> 436a82af52529d77e50de959c84c7c2d4ed5887a
         pointClicked = new Point(xvar,yvar);
         
         
