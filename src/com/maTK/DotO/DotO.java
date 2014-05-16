@@ -3,9 +3,6 @@ package com.maTK.DotO;
 import javax.imageio.*;
 import javax.swing.*;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -49,7 +46,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image openingScreenImage;
 	private Image backgroundImage;
 	private Image towerSpriteImage;
-	private Image animationSpriteImage;
+	private Image creepSpriteImage;
+	
+	private Creep[] testCreep = new Creep[4];
 	
 	private Rectangle[] towerRec = new Rectangle[9];
 
@@ -80,9 +79,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         openingScreenImage = loadImage(openingScreenPath);
 		backgroundImage = loadImage(backgroundPath);  
 		towerSpriteImage = loadImage(towerSpriteImagePath);
-		animationSpriteImage = loadImage(animationSpritePath);
+		creepSpriteImage = loadImage(animationSpritePath);
 		setBackground(Color.white);
 	    addMouseListener(this);
+	    addMouseMotionListener(this);
 	    initRoads();
 	}
 
@@ -181,6 +181,12 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 					g.fillRect(p.x, p.y, 3, 3);
 				}
 			}
+		    for(int i=0; i<testCreep.length; i++)
+		    {
+				g.setColor(Color.blue);
+				g.fillRect(testCreep[i].xpos, testCreep[i].ypos, 3, 3);
+				testCreep[i].move();
+		    }
 		}
 	}
 	@Override
@@ -190,6 +196,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	}
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
+		repaint();
 		// TODO Auto-generated method stub
 		
 	}
@@ -205,7 +212,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         
 		xvar = arg0.getX();
         yvar = arg0.getY();
-        System.out.println("x: " + xvar + ", y: " + yvar);
+        //System.out.println("x: " + xvar + ", y: " + yvar);
         pointClicked = new Point(xvar,yvar);
         
         
@@ -329,6 +336,11 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	    p.addPoint(361, 354);
 	    p.addPoint(397, 360);
 	    roads.add(p);
+	    for(int i=0; i<testCreep.length; i++)
+	    {
+	    	testCreep[i]= new Creep(100, 1, 100, 10);
+		    testCreep[i].addPath(roads.get(i));
+	    }
 	}
 
 }
