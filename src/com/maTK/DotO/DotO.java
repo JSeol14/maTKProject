@@ -51,6 +51,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image animationSpriteImage;
 	
 	private Rectangle[] towerRec = new Rectangle[9];
+
+	
+	//1. Create the frame.
+	private static JFrame frame = new JFrame("Defense Of The Origin");
 	
 	/*
 	 * Tower.type is an integer symbolizing all the different colors
@@ -81,9 +85,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	}
 
     private static void createAndShowGUI() {
-    	    	
-		//1. Create the frame.
-		JFrame frame = new JFrame("Defense Of The Origin");
 
 		//2. Optional: What happens when the frame closes?
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -132,8 +133,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	protected void paintComponent(Graphics g)  
 	{  
 		super.paintComponent(g);  
-		int w = getWidth();  
-		int h = getHeight();
+		Rectangle r = frame.getBounds();
+		int w = r.width;  
+		int h = r.height;
 		towerSizeX = (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)) - (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(1));
 		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
 		
@@ -182,9 +184,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		int xvar;
-		int yvar;
-		int w = getWidth();
-		int h = getHeight();
+		int yvar;  
+		Rectangle r = frame.getBounds();
+		int w = r.width;  
+		int h = r.height;
 		Point pointClicked;
         
 		xvar = arg0.getX();
@@ -197,7 +200,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
     		if(recSelected!=-1&&(xvar<TOWERX*w))
     		{
     	        pointClicked = new Point(xvar,yvar);
-    			createTower(recSelected,(int)(((double)pointClicked.x/(double)SIZEX)*(double)w),pointClicked.y);
+    			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
     			recSelected = -1;
     		}
         	for(int i=0; i<towerRec.length; i++)
