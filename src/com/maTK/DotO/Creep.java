@@ -50,17 +50,37 @@ public class Creep {
 		nextPoint = ((Point) path.points.get(pathNum));
 		int difX = nextPoint.x - xpos;
 		int difY = nextPoint.y - ypos;
-		dir = Math.atan2(difX, difY);
+		dir = Math.atan2(difY, difX);
 		slope = (double)(difY)/(double)(difX);
+		System.out.println("NEXT POINT dx: " + difX + " dy: " + difY + " dir: " + dir);
 	}
 	
 	public void move()
 	{
-		double difX = Math.cos(dir)*slope;
-		double difY = Math.sin(dir)*slope;
+		double difX = Math.cos(dir)*speed;
+		double difY = Math.sin(dir)*speed;
 		aXpos += difX;
 		aYpos += difY;
-		xpos = (int) Math.floor(aXpos);
-		ypos = (int) Math.floor(aYpos);
+		if(difX>=0)
+		{
+			xpos = (int) Math.floor(aXpos);
+		}
+		else
+		{
+			xpos = (int) Math.ceil(aXpos);
+		}
+		if(difY>=0)
+		{
+			ypos = (int) Math.floor(aYpos);
+		}
+		else
+		{
+			ypos = (int) Math.ceil(aYpos);
+		}
+		if(Math.abs(xpos - nextPoint.x)<=1 && Math.abs(ypos - nextPoint.y)<=1){
+			reachPoint();
+		}
+		System.out.println("dx: " + difX + " dy: " + difY + " dir: " + dir);
+		System.out.println("CREEP x: " + aXpos + " y: " + aYpos);
 	}
 }
