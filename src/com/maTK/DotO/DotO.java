@@ -24,6 +24,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	
 	private String backgroundPath = "resources/Background.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
 	private String towerSpriteImagePath = "resources/TowerSprite.png";
+	private String towerSpriteImagePath2 = "resources/TowerSheetTransparent.png";
 	private String openingScreenPath = "resources/OpeningScreen.png";
 	private String animationSpritePath = "resources/AnimationSprite.png";
 	
@@ -42,10 +43,12 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private ArrayList<Tower> towers = new ArrayList<Tower>();//The Array List of all the towers active on the map
 	private ArrayList<Road> roads = new ArrayList<Road>();//The Array List  of all the paths on the map
 	private Tower tempTower;//A place holder for the towers we create for the vector "tower"
+	private Tower placeTower;//Potential tower during placing selection
 	
 	private Image openingScreenImage;
 	private Image backgroundImage;
 	private Image towerSpriteImage;
+	private Image towerSpriteImage2;
 	private Image creepSpriteImage;
 	
 	private Creep[] testCreep = new Creep[4];
@@ -80,6 +83,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         openingScreenImage = loadImage(openingScreenPath);
 		backgroundImage = loadImage(backgroundPath);  
 		towerSpriteImage = loadImage(towerSpriteImagePath);
+		towerSpriteImage2 = loadImage(towerSpriteImagePath2);
 		creepSpriteImage = loadImage(animationSpritePath);
 		setBackground(Color.white);
 	    addMouseListener(this);
@@ -171,6 +175,13 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 					g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
 				}
 			}
+
+			if(recSelected!=-1)
+			{		
+				double tempXpos = placeTower.xpos/(double)SIZEX;
+				double tempYpos = placeTower.ypos/(double)SIZEY;
+				g.drawImage(towerSpriteImage2, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, placeTower.type*SPRITEY, SPRITEX, (placeTower.type+1)*SPRITEY,this);
+			}
 			
 			for(int i=0; i<roads.size(); i++)
 			{
@@ -199,7 +210,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				testCreep[i].move();
 				double tempXpos = testCreep[i].xpos/(double)SIZEX;
 				double tempYpos = testCreep[i].ypos/(double)SIZEY;
-				g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, i*SPRITEY, animTemp + SPRITEX, (i+1)*SPRITEY,this);
+				g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, (i+4)*SPRITEY, animTemp + SPRITEX, (i+5)*SPRITEY,this);
 		    }
 		    counter++;
 		}
@@ -211,6 +222,16 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	}
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
+		Rectangle r = frame.getBounds();
+		int w = r.width;  
+		int h = r.height;
+		int xvar = arg0.getX();
+        int yvar = arg0.getY();
+		if(recSelected!=-1)
+		{
+			placeTower.xpos = xvar;
+			placeTower.ypos = yvar;
+		}
 		repaint();
 		// TODO Auto-generated method stub
 		
@@ -233,15 +254,20 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         
         if(gameStarted)
         {
-    		if(recSelected!=-1&&(xvar<TOWERX*w))
+    		if(recSelected!=-1&&(xvar<TOWERX*w - towerSizeX/2))
     		{
     			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
+    			recSelected = -1;
+    		}
+    		if(recSelected!=-1&&!(xvar<TOWERX*w - towerSizeX/2))
+    		{
     			recSelected = -1;
     		}
         	for(int i=0; i<towerRec.length; i++)
         	{
         		if(towerRec[i].contains(pointClicked))
         		{
+        			placeTower = new Tower(xvar,yvar,i,0);
                 	recSelected = i;
         		}
         	}
