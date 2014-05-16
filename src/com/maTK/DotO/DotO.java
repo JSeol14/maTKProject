@@ -49,6 +49,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image creepSpriteImage;
 	
 	private Creep[] testCreep = new Creep[4];
+	private int counter=0;
 	
 	private Rectangle[] towerRec = new Rectangle[9];
 
@@ -167,7 +168,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 					//g.drawImage(towerSpriteImage, 20, 20, 20+towerSizeX,20+towerSizeY, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
 					double tempXpos = tempTower.xpos/(double)SIZEX;
 					double tempYpos = tempTower.ypos/(double)SIZEY;
-					g.drawImage(towerSpriteImage, (int)(tempXpos*w), (int)(tempYpos*h), (int)((tempXpos)*w)+towerSizeX,(int)((tempYpos)*h)+towerSizeY, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
+					g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
 				}
 			}
 			
@@ -183,10 +184,24 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 			}
 		    for(int i=0; i<testCreep.length; i++)
 		    {
+		    	int tempInt = counter%30;
+		    	int animTemp;
+		    	if(tempInt<15)
+		    	{
+		    		animTemp = 0;
+		    	}
+		    	else
+		    	{
+		    		animTemp = 100;
+		    	}
 				g.setColor(Color.blue);
 				g.fillRect(testCreep[i].xpos, testCreep[i].ypos, 3, 3);
 				testCreep[i].move();
+				double tempXpos = testCreep[i].xpos/(double)SIZEX;
+				double tempYpos = testCreep[i].ypos/(double)SIZEY;
+				g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, i*SPRITEY, animTemp + SPRITEX, (i+1)*SPRITEY,this);
 		    }
+		    counter++;
 		}
 	}
 	@Override
