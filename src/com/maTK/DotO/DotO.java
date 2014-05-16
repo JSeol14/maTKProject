@@ -131,6 +131,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	@Override
 	protected void paintComponent(Graphics g)  
 	{  
+	    System.out.println(""+getWidth()+""+getHeight());
+
 		super.paintComponent(g);  
 		int w = getWidth();  
 		int h = getHeight();
@@ -152,6 +154,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 					g.drawImage(towerSpriteImage, (int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j+2)+((h-(TOWERY*h))/36)),SPRITEX*0,(SPRITEY*(3*j))+(SPRITEY*k),SPRITEX*1,(SPRITEY*(3*j))+(SPRITEY*(k+1)),this);
 					
 					towerRec[3*j+k] = new Rectangle ((int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),towerSizeX,towerSizeY);
+					g.setColor(Color.PINK);
+					g.fillRect((int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),towerSizeX,towerSizeY);
 				}
 			}
 			
@@ -160,7 +164,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				tempTower = towers.get(i);
 				if(tempTower.isAlive)
 				{
-					//g.drawImage(towerSpriteImage, 20, 20, 20+towerSizeX,20+towerSizeY, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
 					double tempXpos = tempTower.xpos/(double)SIZEX;
 					double tempYpos = tempTower.ypos/(double)SIZEY;
 					g.drawImage(towerSpriteImage, (int)(tempXpos*w), (int)(tempYpos*h), (int)((tempXpos)*w)+towerSizeX,(int)((tempYpos)*h)+towerSizeY, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
@@ -189,6 +192,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         
 		xvar = arg0.getX();
         yvar = arg0.getY();
+        System.out.println("x "+xvar+" y "+yvar);
         pointClicked = new Point(xvar,yvar);
         
         
