@@ -24,13 +24,15 @@ public class Creep {
 	public int pathNum = 0;//number of which point the creep is on
 	public Point nextPoint;//nextPoint on path
 	
-	public Creep(int hp, double spd, int damage, int gold)
+	public Creep(int hp, double spd, int damage, int gold, int t)
 	{
 		maxHp = hp;
 		curHp = hp;
 		speed = spd;
 		dmg = damage;
 		goldNum = gold;
+		type = t;
+		isAlive = true;
 	}
 	
 	public void addPath(Road p)
@@ -44,43 +46,51 @@ public class Creep {
 		reachPoint();//set next point
 	}
 	
-	public void reachPoint()
+	public boolean reachPoint()
 	{
 		pathNum++;
-		nextPoint = ((Point) path.points.get(pathNum));
-		int difX = nextPoint.x - xpos;
-		int difY = nextPoint.y - ypos;
-		dir = Math.atan2(difY, difX);
-		slope = (double)(difY)/(double)(difX);
-		//System.out.println("NEXT POINT dx: " + difX + " dy: " + difY + " dir: " + dir);
+		if(pathNum<path.points.size())
+		{
+			nextPoint = ((Point) path.points.get(pathNum));
+			int difX = nextPoint.x - xpos;
+			int difY = nextPoint.y - ypos;
+			dir = Math.atan2(difY, difX);
+			slope = (double)(difY)/(double)(difX);
+			//System.out.println("NEXT POINT dx: " + difX + " dy: " + difY + " dir: " + dir);
+			return false;
+		}
+		else
+		{
+			return true;//reached last point
+		}
 	}
 	
 	public void move()
 	{
-		double difX = Math.cos(dir)*speed;
-		double difY = Math.sin(dir)*speed;
-		aXpos += difX;
-		aYpos += difY;
-		if(difX>=0)
+		if(isAlive)
 		{
-			xpos = (int) Math.floor(aXpos);
+			double difX = Math.cos(dir)*speed;
+			double difY = Math.sin(dir)*speed;
+			aXpos += difX;
+			aYpos += difY;
+			if(difX>=0)
+			{
+				xpos = (int) Math.floor(aXpos);
+			}
+			else
+			{
+				xpos = (int) Math.ceil(aXpos);
+			}
+			if(difY>=0)
+			{
+				ypos = (int) Math.floor(aYpos);
+			}
+			else
+			{
+				ypos = (int) Math.ceil(aYpos);
+			}
+			//System.out.println("dx: " + difX + " dy: " + difY + " dir: " + dir);
+			//System.out.println("CREEP x: " + aXpos + " y: " + aYpos);
 		}
-		else
-		{
-			xpos = (int) Math.ceil(aXpos);
-		}
-		if(difY>=0)
-		{
-			ypos = (int) Math.floor(aYpos);
-		}
-		else
-		{
-			ypos = (int) Math.ceil(aYpos);
-		}
-		if(Math.abs(xpos - nextPoint.x)<=1 && Math.abs(ypos - nextPoint.y)<=1){
-			reachPoint();
-		}
-		//System.out.println("dx: " + difX + " dy: " + difY + " dir: " + dir);
-		//System.out.println("CREEP x: " + aXpos + " y: " + aYpos);
 	}
 }
