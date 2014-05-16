@@ -24,13 +24,14 @@ public class Creep {
 	public int pathNum = 0;//number of which point the creep is on
 	public Point nextPoint;//nextPoint on path
 	
-	public Creep(int hp, double spd, int damage, int gold)
+	public Creep(int hp, double spd, int damage, int gold, int t)
 	{
 		maxHp = hp;
 		curHp = hp;
 		speed = spd;
 		dmg = damage;
 		goldNum = gold;
+		type = t;
 		isAlive = true;
 	}
 	

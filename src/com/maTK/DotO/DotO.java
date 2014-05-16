@@ -232,7 +232,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				}
 				double tempXpos = tempCreep.xpos/(double)SIZEX;
 				double tempYpos = tempCreep.ypos/(double)SIZEY;
-				g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, (i+4)*SPRITEY, animTemp + SPRITEX, (i+5)*SPRITEY,this);
+				g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, (tempCreep.type)*SPRITEY, animTemp + SPRITEX, (tempCreep.type + 1)*SPRITEY,this);
 		    }
 		    for(int i=removeCreeps.size()-1; i>=0; i--)
 		    {
@@ -410,7 +410,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	    roads.add(p);
 	    for(int i=0; i<4; i++)
 	    {
-	    	creepWave.add(new Creep(100, 1, 1, 10));
+	    	creepWave.add(new Creep(100, 1, 1, 10,i+4));
 		    creepWave.get(i).addPath(roads.get(i));
 	    }
 	}
