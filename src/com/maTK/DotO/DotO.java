@@ -42,7 +42,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private int recSelected = -1;
 	
 	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
-	private ArrayList<Tower> towers = new ArrayList<Tower>();//The vector of all the towers active on the map
+	private ArrayList<Tower> towers = new ArrayList<Tower>();//The Array List of all the towers active on the map
+	private ArrayList<Road> roads = new ArrayList<Road>();//The Array List  of all the paths on the map
 	private Tower tempTower;//A place holder for the towers we create for the vector "tower"
 	
 	private Image openingScreenImage;
@@ -82,6 +83,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		animationSpriteImage = loadImage(animationSpritePath);
 		setBackground(Color.white);
 	    addMouseListener(this);
+	    initRoads();
 	}
 
     private static void createAndShowGUI() {
@@ -168,6 +170,17 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 					g.drawImage(towerSpriteImage, (int)(tempXpos*w), (int)(tempYpos*h), (int)((tempXpos)*w)+towerSizeX,(int)((tempYpos)*h)+towerSizeY, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
 				}
 			}
+			
+			for(int i=0; i<roads.size(); i++)
+			{
+				Road tRoad = roads.get(i);
+				for(int a=0; a<tRoad.points.size(); a++)
+				{
+					Point p = tRoad.points.get(a);
+					g.setColor(Color.red);
+					g.fillRect(p.x, p.y, 3, 3);
+				}
+			}
 		}
 	}
 	@Override
@@ -192,6 +205,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         
 		xvar = arg0.getX();
         yvar = arg0.getY();
+        System.out.println("x: " + xvar + ", y: " + yvar);
         pointClicked = new Point(xvar,yvar);
         
         
@@ -199,7 +213,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         {
     		if(recSelected!=-1&&(xvar<TOWERX*w))
     		{
-    	        pointClicked = new Point(xvar,yvar);
     			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
     			recSelected = -1;
     		}
@@ -237,6 +250,85 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void initRoads()
+	{
+		//TOP
+	    Road p = new Road();
+	    p.addPoint(0, 196);
+	    p.addPoint(41, 157);
+	    p.addPoint(90, 105);
+	    p.addPoint(146, 70);
+	    p.addPoint(215, 53);
+	    p.addPoint(279, 51);
+	    p.addPoint(323, 73);
+	    p.addPoint(348, 125);
+	    p.addPoint(377, 162);
+	    p.addPoint(414, 208);
+	    p.addPoint(456, 244);
+	    p.addPoint(468, 278);
+	    p.addPoint(468, 288);
+	    roads.add(p);
+
+		//RIGHT
+	    p = new Road();
+	    p.addPoint(652, 0);
+	    p.addPoint(648, 48);
+	    p.addPoint(654, 113);
+	    p.addPoint(664, 164);
+	    p.addPoint(683, 216);
+	    p.addPoint(724, 242);
+	    p.addPoint(771, 270);
+	    p.addPoint(802, 323);
+	    p.addPoint(800, 386);
+	    p.addPoint(765, 441);
+	    p.addPoint(718, 469);
+	    p.addPoint(672, 471);
+	    p.addPoint(640, 445);
+	    p.addPoint(610, 407);
+	    p.addPoint(578, 373);
+	    p.addPoint(550, 362);
+	    p.addPoint(538, 362);
+	    roads.add(p);
+
+		//BOTTOM
+	    p = new Road();
+	    p.addPoint(935, 558);
+	    p.addPoint(879, 562);
+	    p.addPoint(831, 597);
+	    p.addPoint(781, 634);
+	    p.addPoint(727, 668);
+	    p.addPoint(664, 670);
+	    p.addPoint(579, 670);
+	    p.addPoint(484, 669);
+	    p.addPoint(412, 649);
+	    p.addPoint(367, 609);
+	    p.addPoint(371, 564);
+	    p.addPoint(411, 527);
+	    p.addPoint(451, 487);
+	    p.addPoint(463, 453);
+	    p.addPoint(465, 431);
+	    roads.add(p);
+	    
+		//LEFT
+	    p = new Road();
+	    p.addPoint(176, 672);
+	    p.addPoint(165, 628);
+	    p.addPoint(140, 573);
+	    p.addPoint(112, 505);
+	    p.addPoint(93, 443);
+	    p.addPoint(90, 398);
+	    p.addPoint(112, 351);
+	    p.addPoint(134, 315);
+	    p.addPoint(175, 279);
+	    p.addPoint(215, 260);
+	    p.addPoint(262, 258);
+	    p.addPoint(290, 290);
+	    p.addPoint(321, 321);
+	    p.addPoint(361, 354);
+	    p.addPoint(397, 360);
+	    roads.add(p);
 	}
 
 }

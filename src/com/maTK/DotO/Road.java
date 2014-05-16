@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 public class Road {
-	public ArrayList points;
+	public ArrayList<Point> points = new ArrayList();
 	
 	public Road()
 	{
