@@ -14,6 +14,7 @@ public class Creep {
 	public int width;//width of creep
 	public int height;//height of creep
 	public double dir;//corresponds to direction creep is facing (radians)
+	public double dir2;//corresponds to direction creep is facing (in 10's of degrees) i.e 1 = 5-14 degrees, 2 = 15-24 degrees, etc.
 	public double slope;//slope of line the creep is currently traveling on
 	public int frameCount;//corresponds to total number of frames in animation
 	public int frameNum;//corresponds to current frame number
@@ -55,6 +56,7 @@ public class Creep {
 			int difX = nextPoint.x - xpos;
 			int difY = nextPoint.y - ypos;
 			dir = Math.atan2(difY, difX);
+			dir2 = (int)(Math.toDegrees(dir)/10);
 			slope = (double)(difY)/(double)(difX);
 			//System.out.println("NEXT POINT dx: " + difX + " dy: " + difY + " dir: " + dir);
 			return false;

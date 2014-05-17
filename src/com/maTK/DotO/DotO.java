@@ -27,6 +27,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private String towerSpriteImagePath2 = "resources/TowerSheetTransparent.png";
 	private String openingScreenPath = "resources/OpeningScreen.png";
 	private String animationSpritePath = "resources/AnimationSprite.png";
+	private String animationSpritePath2 = "resources/FinalBugSheet.png";
 	private String rangeSpritePath = "resources/RangeIndicator.png";
 	
 	private boolean gameStarted = false;
@@ -51,6 +52,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private Image towerSpriteImage;
 	private Image towerSpriteImage2;
 	private Image creepSpriteImage;
+	private Image creepSpriteImage2;//with direction
 	private Image rangeIndicatorImage;
 	
 	private int counter=0;
@@ -86,6 +88,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		towerSpriteImage = loadImage(towerSpriteImagePath);
 		towerSpriteImage2 = loadImage(towerSpriteImagePath2);
 		creepSpriteImage = loadImage(animationSpritePath);
+		creepSpriteImage2 = loadImage(animationSpritePath2);
 		rangeIndicatorImage = loadImage(rangeSpritePath);
 		setBackground(Color.white);
 	    addMouseListener(this);
@@ -185,6 +188,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				g.drawImage(rangeIndicatorImage, (int)(tempXpos)-placeTower.range/2, (int)(tempYpos)-placeTower.range/2, (int)(tempXpos)+placeTower.range/2,(int)(tempYpos)+placeTower.range/2, 0, 0, 1000, 1000,this);
 			}
 			
+			//Paints Dots to show path
+			/*
 			for(int i=0; i<roads.size(); i++)
 			{
 				Road tRoad = roads.get(i);
@@ -195,6 +200,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 					g.fillRect((int)((double)p.x/(double)SIZEX*(double)w), (int)((double)p.y/(double)SIZEY*(double)h), 3, 3);
 				}
 			}
+			*/
 			ArrayList<Integer> removeCreeps = new ArrayList();//numbers of the creeps to be removed
 		    for(int i=0; i<creepWave.size(); i++)
 		    {
@@ -228,8 +234,27 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				}
 				double tempXpos = tempCreep.xpos/(double)SIZEX;
 				double tempYpos = tempCreep.ypos/(double)SIZEY;
-				g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, (tempCreep.type)*SPRITEY, animTemp + SPRITEX, (tempCreep.type + 1)*SPRITEY,this);
-		    }
+				//g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, (tempCreep.type)*SPRITEY, animTemp + SPRITEX, (tempCreep.type + 1)*SPRITEY,this);
+				
+				
+				if(tempCreep.dir2>=-17 && tempCreep.dir2<=-10)
+				{
+					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + (tempCreep.dir2+18)*100 + SPRITEX), (tempCreep.type + 1)*SPRITEY, (int)(animTemp*10 + (tempCreep.dir2+18)*100), (tempCreep.type)*SPRITEY,this);
+				}	
+				else if(tempCreep.dir2<=-1 && tempCreep.dir2>=-9)
+				{
+					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + (-tempCreep.dir2)*100), (tempCreep.type + 1)*SPRITEY, (int)(animTemp*10 + (-tempCreep.dir2)*100 + SPRITEX), (tempCreep.type)*SPRITEY,this);
+				}
+				else if(tempCreep.dir2>=0 && tempCreep.dir2<=9)
+				{
+					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + tempCreep.dir2*100), (tempCreep.type)*SPRITEY, (int)(animTemp*10 + tempCreep.dir2*100 + SPRITEX), (tempCreep.type + 1)*SPRITEY,this);
+				}				
+				else if(tempCreep.dir2>=10 && tempCreep.dir2<=18)
+				{
+					System.out.println("RUN: " + tempCreep.dir2);
+					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + (18-tempCreep.dir2)*100 + SPRITEX), (tempCreep.type)*SPRITEY, (int)(animTemp*10 + (18-tempCreep.dir2)*100), (tempCreep.type + 1)*SPRITEY,this);
+				}
+			}
 		    for(int i=removeCreeps.size()-1; i>=0; i--)
 		    {
 		    	creepWave.remove(removeCreeps.get(i).intValue());
@@ -239,7 +264,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 		    }
 		    counter++;
 		}
-		System.out.println(originHP);
+		//System.out.println(originHP);
 	}
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
