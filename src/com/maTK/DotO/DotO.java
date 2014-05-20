@@ -10,9 +10,8 @@ import java.awt.event.MouseMotionListener;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Vector;
 
-public class DotO extends JPanel implements MouseListener, MouseMotionListener {
+public class DotO extends JPanel implements MouseListener, MouseMotionListener, Runnable {
 
 	private final static int SIZEX = 1280;//X size of screen
 	private final static int SIZEY = 720; //Y size of screen
@@ -58,6 +57,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	private int counter=0;
 	
 	private Rectangle[] towerRec = new Rectangle[9];
+	
+	Thread thread;
 
 	
 	//1. Create the frame.
@@ -75,8 +76,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	public static void main(String[] args) 
 	{
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            public void run() 
+            {
             	createAndShowGUI();
+
             }
         });
 	}
@@ -94,7 +97,23 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 	    addMouseListener(this);
 	    addMouseMotionListener(this);
 	    initRoads();
+	    thread = new Thread(this);
+	    thread.start();
 	}
+	public void run()
+	{
+		while(true)
+		{
+			try {
+				repaint();
+				thread.sleep(5);
+			} catch (InterruptedException e) {
+			
+			}
+		}
+	}
+	
+
 
     private static void createAndShowGUI() {
 
@@ -251,7 +270,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 				}				
 				else if(tempCreep.dir2>=10 && tempCreep.dir2<=18)
 				{
-					System.out.println("RUN: " + tempCreep.dir2);
 					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + (18-tempCreep.dir2)*100 + SPRITEX), (tempCreep.type)*SPRITEY, (int)(animTemp*10 + (18-tempCreep.dir2)*100), (tempCreep.type + 1)*SPRITEY,this);
 				}
 			}
@@ -283,7 +301,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
 			placeTower.xpos = xvar;
 			placeTower.ypos = yvar;
 		}
-		repaint();
 		// TODO Auto-generated method stub
 		
 	}
@@ -330,7 +347,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener {
         	gameStarted = true;
         }
 
-        repaint();
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
