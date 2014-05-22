@@ -238,7 +238,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 				g.setColor(Color.blue);
 				g.fillRect((int)((double)testCreep[i].xpos/(double)SIZEX*(double)w), (int)((double)testCreep[i].ypos/(double)SIZEY*(double)h), 3, 3);
 				*/
-		    	tempCreep.move();
+		    	tempCreep.move((double)((double)w/(double)SIZEX));
 				if(tempCreep.isAlive)
 				{
 					if(Math.abs(tempCreep.xpos - tempCreep.nextPoint.x)<=1 && Math.abs(tempCreep.ypos - tempCreep.nextPoint.y)<=1)
@@ -270,7 +270,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 				}				
 				else if(tempCreep.dir2>=10 && tempCreep.dir2<=18)
 				{
-					System.out.println("RUN: " + tempCreep.dir2);
 					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + (18-tempCreep.dir2)*100 + SPRITEX), (tempCreep.type)*SPRITEY, (int)(animTemp*10 + (18-tempCreep.dir2)*100), (tempCreep.type + 1)*SPRITEY,this);
 				}
 			}

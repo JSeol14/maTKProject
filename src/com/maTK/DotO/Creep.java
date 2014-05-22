@@ -67,12 +67,12 @@ public class Creep {
 		}
 	}
 	
-	public void move()
+	public void move(double scale)
 	{
 		if(isAlive)
 		{
-			double difX = Math.cos(dir)*speed;
-			double difY = Math.sin(dir)*speed;
+			double difX = Math.cos(dir)*speed*scale;
+			double difY = Math.sin(dir)*speed*scale;
 			aXpos += difX;
 			aYpos += difY;
 			if(difX>=0)
