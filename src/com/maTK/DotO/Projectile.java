@@ -1,10 +1,18 @@
 package com.maTK.DotO;
 
+import java.awt.Point;
+
 public class Projectile {
 
 	public int damage;//projectile's damage
 	public int xpos;//projectile's xpos
 	public int ypos;//projectile's ypos
+	public double aXpos;//actual xpos
+	public double aYpos;//actual ypos
+	public double speed = 2;//speed of projectile
+	public boolean isAlive = true;//tells whether projectile exists
+	public double dir;//corresponds to direction projectile is facing (radians)
+	
 	public int splashRadius = 1;//radius of projectile splash, default hits only target, splash has much less dmg
 	public int extraGold = 0;//extra gold from creep kill
 	public int extraRange = 0;//extra range of tower
@@ -27,6 +35,47 @@ public class Projectile {
 		damage = dmg;
 		xpos = initXpos;
 		ypos = initYpos;
+		aXpos = xpos;
+		aYpos = ypos;
+	}
+	
+	public void move(double scale)
+	{
+		if(isAlive)
+		{
+			int difX = Target.xpos - xpos;
+			int difY = Target.ypos - ypos;
+			dir = Math.atan2(difY, difX);
+			double difX2 = Math.cos(dir)*speed*scale;
+			double difY2 = Math.sin(dir)*speed*scale;
+			aXpos += difX2;
+			aYpos += difY2;
+			if(difX2>=0)
+			{
+				xpos = (int) Math.floor(aXpos);
+			}
+			else
+			{
+				xpos = (int) Math.ceil(aXpos);
+			}
+			if(difY2>=0)
+			{
+				ypos = (int) Math.floor(aYpos);
+			}
+			else
+			{
+				ypos = (int) Math.ceil(aYpos);
+			}
+			if(Math.abs(Target.xpos - xpos)<=1 && Math.abs(Target.ypos - ypos)<=1)
+			{
+				Target.curHp -= damage;
+				if(Target.curHp <=0)
+				{
+					Target.isAlive = false;
+				}
+				isAlive = false;
+			}
+		}
 	}
 	
 	public void setSplash(int radius)

@@ -11,7 +11,7 @@ public class Tower {
 	public int sellPrice;//money from selling
 	public boolean isAlive;//alive or not
 	
-	public Tower (int initX, int initY, int t, int l, int r)
+	public Tower (int initX, int initY, int t, int l, int r, int dmg)
 	{
 		xpos = initX;
 		ypos = initY;
@@ -19,6 +19,7 @@ public class Tower {
 		level = l;
 		range = r;
 		isAlive = true;
+		damage = dmg;
 	}
 	
 	public void upgrade()//Upgrades tower to next level
@@ -28,8 +29,9 @@ public class Tower {
 		sellPrice = level;//Gives the value of the tower if sold
 	}
 	
-	public void fire(Creep target)
+	public Projectile fire(Creep target)
 	{
-		
+		Projectile temp = new Projectile(xpos, ypos, damage, target);
+		return(temp);
 	}
 }
