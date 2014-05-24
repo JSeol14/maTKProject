@@ -10,8 +10,10 @@ public class Tower {
 	public int upPrice;//cost to upgrade	
 	public int sellPrice;//money from selling
 	public boolean isAlive;//alive or not
+	public int reloadTime;//number of frames between bullets
+	public int reloadCount;//counter of frames between bullets
 	
-	public Tower (int initX, int initY, int t, int l, int r, int dmg)
+	public Tower (int initX, int initY, int t, int l, int r, int dmg, int rT)
 	{
 		xpos = initX;
 		ypos = initY;
@@ -20,6 +22,8 @@ public class Tower {
 		range = r;
 		isAlive = true;
 		damage = dmg;
+		reloadTime = rT;
+		reloadCount = reloadTime;
 	}
 	
 	public void upgrade()//Upgrades tower to next level

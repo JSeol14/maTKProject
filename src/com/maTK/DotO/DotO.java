@@ -21,7 +21,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private final static int SPRITEY = 100;
 	
 	
-	private String backgroundPath = "resources/Background.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
+	private String backgroundPath = "resources/Background2.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
 	private String towerSpriteImagePath = "resources/TowerSprite.png";
 	private String towerSpriteImagePath2 = "resources/TowerSheetTransparent.png";
 	private String openingScreenPath = "resources/OpeningScreen.png";
@@ -54,6 +54,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private Image creepSpriteImage;
 	private Image creepSpriteImage2;//with direction
 	private Image rangeIndicatorImage;
+	
+	private Font customFont;
 	
 	private int counter=0;
 	
@@ -102,14 +104,29 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    thread.start();
 	}
 	public void run()
-	{
+	{                    
+		try {
+			//create the font to use. Specify the size!
+			customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(24f);
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			//register the font
+			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")));
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	    catch(FontFormatException e)
+	    {
+	        e.printStackTrace();
+	    }
 		while(true)
 		{
 			try {
 				repaint();
 				doStuff();
 				thread.sleep(5);
-				System.out.println(originHP);
+				//System.out.println(originHP);
 			} catch (InterruptedException e) {
 			
 			}
@@ -157,7 +174,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	{
 		if(gameStarted)
 		{
-			tempTower = new Tower(xpos,ypos,type,0, 300, 1);
+			tempTower = new Tower(xpos,ypos,type,0, 300, 30, 100);
 			towers.add(tempTower);
 			//System.out.println("Tower added at x: "+xpos+", y:"+ypos);
 		}
@@ -167,6 +184,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	protected void paintComponent(Graphics g)  
 	{  
 		super.paintComponent(g);  
+		g.setFont(customFont);
 		Rectangle r = frame.getBounds();
 		int w = r.width;  
 		int h = r.height;
@@ -275,6 +293,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		    counter++;
 		}
 		//System.out.println(originHP);
+		g.setColor(Color.black);
+		g.drawString("TESTING FONT",1000,600);
 	}
 	
 	public void doStuff()
@@ -302,15 +322,21 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    for(int i=0; i<towers.size(); i++)
 	    {
 	    	Tower tempTower = towers.get(i);
+	    	if(tempTower.reloadTime>0)
+	    	{
+	    		tempTower.reloadTime--;
+	    	}
+    		//System.out.println(tempTower.reloadTime);
 	    	for(int a=0; a<creepWave.size(); a++)
 	    	{
 	    		Creep tempCreep = creepWave.get(a);
 	    		double distance = Math.sqrt(Math.pow((tempTower.xpos - tempCreep.xpos),2) + Math.pow((tempTower.ypos - tempCreep.ypos),2));
-	    		if(distance<=tempTower.range/2)
+	    		if(distance<=tempTower.range/2 && tempTower.reloadTime == 0)
 	    		{
 	    			//System.out.println("FIRE");
 	    			projectiles.add(tempTower.fire(tempCreep));
 	    			a=creepWave.size();//break loop to ensure that it only fires once
+	    			tempTower.reloadTime = tempTower.reloadCount;
 	    		}
 	    	}
 	    }
@@ -335,7 +361,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    	if(tempCreep.isAlive == false)
 	    	{
 	    		creepWave.remove(i);
-		    	Creep testCreep = new Creep(100, 1, 1, 10,(int)(Math.random()*10));
+		    	Creep testCreep = new Creep(100, 0.4, 1, 10,(int)(Math.random()*10));
 		    	testCreep.addPath(roads.get((int)(Math.random()*4)));
 		    	creepWave.add(testCreep);
 	    	}
@@ -363,6 +389,21 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		int xvar;
 		int yvar;  
@@ -394,7 +435,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         	{
         		if(towerRec[i].contains(pointClicked))
         		{
-        			placeTower = new Tower(xvar,yvar,i,0, 300, 1);
+        			placeTower = new Tower(xvar,yvar,i,0, 300, 1, 10);
                 	recSelected = i;
         		}
         	}
@@ -403,21 +444,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         {
         	gameStarted = true;
         }
-
-	}
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 	@Override
@@ -505,7 +531,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    roads.add(p);
 	    for(int i=0; i<4; i++)
 	    {
-	    	creepWave.add(new Creep(100, 1, 1, 10,i+4));
+	    	creepWave.add(new Creep(100, 0.4, 1, 10,i+4));
 		    creepWave.get(i).addPath(roads.get(i));
 	    }
 	}
