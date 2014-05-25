@@ -22,6 +22,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	
 	
 	private String backgroundPath = "resources/Background2.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
+	private String sideImagePath = "resources/SideBar.png";
 	private String towerSpriteImagePath = "resources/TowerSprite.png";
 	private String towerSpriteImagePath2 = "resources/TowerSheetTransparent.png";
 	private String openingScreenPath = "resources/OpeningScreen.png";
@@ -48,6 +49,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	
 	private Image openingScreenImage;
 	private Image backgroundImage;
+	private Image sideImage;
 	private Image towerSpriteImage;
 	private Image towerSpriteImage2;
 	private Image creepSpriteImage;
@@ -96,6 +98,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         setBorder(BorderFactory.createLineBorder(Color.black));
         openingScreenImage = loadImage(openingScreenPath);
 		backgroundImage = loadImage(backgroundPath);  
+		sideImage = loadImage(sideImagePath);  
 		towerSpriteImage = loadImage(towerSpriteImagePath);
 		towerSpriteImage2 = loadImage(towerSpriteImagePath2);
 		creepSpriteImage = loadImage(animationSpritePath);
@@ -211,16 +214,11 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		
 		if(gameStarted)
 		{
-			g.drawImage(backgroundImage, 0, 0, w, h, this);				
-			for(int j=0; j<3; j++)
-			{
-				for(int k=0; k<3; k++)
-				{
-					g.drawImage(towerSpriteImage, (int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j+2)+((h-(TOWERY*h))/36)),SPRITEX*0,(SPRITEY*(3*j))+(SPRITEY*k),SPRITEX*1,(SPRITEY*(3*j))+(SPRITEY*(k+1)),this);
-					
-					towerRec[3*j+k] = new Rectangle ((int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),towerSizeX,towerSizeY);
-				}
-			}
+			g.drawImage(backgroundImage, 0, 0, w, h, this);
+
+			double tempXpos2 = 0;
+			double tempYpos2 = 0;
+			boolean drawSelected = false;
 			
 			for(int i=0; i<towers.size();i++)
 			{
@@ -233,9 +231,16 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
 					if(tempTower.selected)
 					{
-						g.drawImage(rangeIndicatorImage, (int)(tempXpos*w)-(tempTower.range*w/SIZEX)/2, (int)(tempYpos*h)-(tempTower.range*h/SIZEY)/2, (int)(tempXpos*w)+(tempTower.range*w/SIZEX)/2,(int)(tempYpos*h)+(tempTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
+						tempXpos2 = tempXpos;
+						tempYpos2 = tempYpos;
+						drawSelected = true;
 					}
 				}
+			}
+			
+			if(drawSelected)
+			{
+				g.drawImage(rangeIndicatorImage, (int)(tempXpos2*w)-(tempTower.range*w/SIZEX)/2, (int)(tempYpos2*h)-(tempTower.range*h/SIZEY)/2, (int)(tempXpos2*w)+(tempTower.range*w/SIZEX)/2,(int)(tempYpos2*h)+(tempTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
 			}
 
 			if(recSelected!=-1)
@@ -308,19 +313,37 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + (18-tempCreep.dir2)*100 + SPRITEX), (tempCreep.type)*SPRITEY, (int)(animTemp*10 + (18-tempCreep.dir2)*100), (tempCreep.type + 1)*SPRITEY,this);
 				}
 			}
-		    counter++;
-		}
-		
-		if(selected)
-		{
-			double tempXpos = (double)980/(double)SIZEX;
-			double tempYpos = (double)400/(double)SIZEY;
-			g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, selectTower.type*SPRITEY, SPRITEX, (selectTower.type+1)*SPRITEY,this);
-			tempXpos = (double)1010/(double)SIZEX;
-			tempYpos = (double)410/(double)SIZEY;
-			g.setFont(customFont36);
-			g.setColor(Color.black);
-			g.drawString(selectTower.typeString + " Tower", (int)(tempXpos*w), (int) (tempYpos*h));
+		    
+		    double sXpos = 936/(double)SIZEX*(double)w;
+		    double sYpos = 0/(double)SIZEY*(double)h;
+		    double sWidth = 344/(double)SIZEX*(double)w;
+		    double sHeight = 720/(double)SIZEY*(double)h;
+		    
+		    g.drawImage(sideImage, (int)sXpos, (int)sYpos, (int)sWidth, (int)sHeight, this);
+		    
+			for(int j=0; j<3; j++)//Tower Select Panel
+			{
+				for(int k=0; k<3; k++)
+				{
+					g.drawImage(towerSpriteImage, (int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),(int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+3)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j+2)+((h-(TOWERY*h))/36)),SPRITEX*0,(SPRITEY*(3*j))+(SPRITEY*k),SPRITEX*1,(SPRITEY*(3*j))+(SPRITEY*(k+1)),this);
+					
+					towerRec[3*j+k] = new Rectangle ((int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),towerSizeX,towerSizeY);
+				}
+			}
+			
+			if(selected)//Selected Tower Stats
+			{
+				double tempXpos = (double)980/(double)SIZEX;
+				double tempYpos = (double)400/(double)SIZEY;
+				g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, selectTower.type*SPRITEY, SPRITEX, (selectTower.type+1)*SPRITEY,this);
+				tempXpos = (double)1020/(double)SIZEX;
+				tempYpos = (double)410/(double)SIZEY;
+				g.setFont(customFont36);
+				g.setColor(Color.black);
+				g.drawString(selectTower.typeString + " Tower", (int)(tempXpos*w), (int) (tempYpos*h));
+			}
+			
+		    counter++;	
 		}
 	}
 	
