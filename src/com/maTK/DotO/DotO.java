@@ -39,7 +39,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private int waveNum;//Counter of which wave the player is facing
 	private int originHP = 100;//HP of the origin
 	private int recSelected = -1;
-	
 	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();//The Array List of all the arrays of different projectiles
 	private ArrayList<Tower> towers = new ArrayList<Tower>();//The Array List of all the towers active on the map
@@ -54,12 +53,18 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private Image creepSpriteImage;
 	private Image creepSpriteImage2;//with direction
 	private Image rangeIndicatorImage;
-	
-	private Font customFont;
+
+	private Font customFont24;
+	private Font customFont36;
+	private Font customFont60;
+	private Font customFont72;
 	
 	private int counter=0;
 	
 	private Rectangle[] towerRec = new Rectangle[9];
+	
+	private Tower selectTower;
+	private boolean selected = false;
 	
 	Thread thread;
 
@@ -107,7 +112,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	{                    
 		try {
 			//create the font to use. Specify the size!
-			customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(24f);
+			customFont24 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(24f);
+			customFont36 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(36f);
+			customFont60 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(60f);
+			customFont72 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(72f);
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			//register the font
 			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")));
@@ -172,9 +180,15 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 
 	private void createTower(int type, int xpos, int ypos)
 	{
+		Rectangle r = frame.getBounds();
+		int w = r.width;  
+		int h = r.height;
+		towerSizeX = (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(3)) - (int)((TOWERX*w)+((w-(TOWERX*w))/10)*(1));
+		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
 		if(gameStarted)
 		{
 			tempTower = new Tower(xpos,ypos,type,0, 300, 30, 100);
+			tempTower.setRec(xpos*w/SIZEX, ypos*h/SIZEY, towerSizeX, towerSizeY);
 			towers.add(tempTower);
 			//System.out.println("Tower added at x: "+xpos+", y:"+ypos);
 		}
@@ -184,7 +198,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	protected void paintComponent(Graphics g)  
 	{  
 		super.paintComponent(g);  
-		g.setFont(customFont);
 		Rectangle r = frame.getBounds();
 		int w = r.width;  
 		int h = r.height;
@@ -212,11 +225,16 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			for(int i=0; i<towers.size();i++)
 			{
 				tempTower = towers.get(i);
+				tempTower.setRec(tempTower.xpos*w/SIZEX, tempTower.ypos*h/SIZEY, towerSizeX, towerSizeY);
 				if(tempTower.isAlive)
 				{
 					double tempXpos = tempTower.xpos/(double)SIZEX;
 					double tempYpos = tempTower.ypos/(double)SIZEY;
 					g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
+					if(tempTower.selected)
+					{
+						g.drawImage(rangeIndicatorImage, (int)(tempXpos*w)-(tempTower.range*w/SIZEX)/2, (int)(tempYpos*h)-(tempTower.range*h/SIZEY)/2, (int)(tempXpos*w)+(tempTower.range*w/SIZEX)/2,(int)(tempYpos*h)+(tempTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
+					}
 				}
 			}
 
@@ -225,7 +243,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 				double tempXpos = placeTower.xpos;
 				double tempYpos = placeTower.ypos;
 				g.drawImage(towerSpriteImage2, (int)(tempXpos)-towerSizeX/2, (int)(tempYpos)-towerSizeY/2, (int)(tempXpos)+towerSizeX/2,(int)(tempYpos)+towerSizeY/2, 0, placeTower.type*SPRITEY, SPRITEX, (placeTower.type+1)*SPRITEY,this);
-				g.drawImage(rangeIndicatorImage, (int)(tempXpos)-placeTower.range/2, (int)(tempYpos)-placeTower.range/2, (int)(tempXpos)+placeTower.range/2,(int)(tempYpos)+placeTower.range/2, 0, 0, 1000, 1000,this);
+				g.drawImage(rangeIndicatorImage, (int)(tempXpos)-(placeTower.range*w/SIZEX)/2, (int)(tempYpos)-(placeTower.range*h/SIZEY)/2, (int)(tempXpos)+(placeTower.range*w/SIZEX)/2,(int)(tempYpos)+(placeTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
 			}
 			
 			//Paints Dots to show path
@@ -292,9 +310,18 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			}
 		    counter++;
 		}
-		//System.out.println(originHP);
-		g.setColor(Color.black);
-		g.drawString("TESTING FONT",1000,600);
+		
+		if(selected)
+		{
+			double tempXpos = (double)980/(double)SIZEX;
+			double tempYpos = (double)400/(double)SIZEY;
+			g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, selectTower.type*SPRITEY, SPRITEX, (selectTower.type+1)*SPRITEY,this);
+			tempXpos = (double)1010/(double)SIZEX;
+			tempYpos = (double)410/(double)SIZEY;
+			g.setFont(customFont36);
+			g.setColor(Color.black);
+			g.drawString(selectTower.typeString + " Tower", (int)(tempXpos*w), (int) (tempYpos*h));
+		}
 	}
 	
 	public void doStuff()
@@ -427,7 +454,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
     			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
     			recSelected = -1;
     		}
-    		if(recSelected!=-1&&!(xvar<TOWERX*w - towerSizeX/2))
+    		else if(recSelected!=-1&&!(xvar<TOWERX*w - towerSizeX/2))
     		{
     			recSelected = -1;
     		}
@@ -437,6 +464,18 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         		{
         			placeTower = new Tower(xvar,yvar,i,0, 300, 1, 10);
                 	recSelected = i;
+        		}
+        	}
+			selected = false;
+        	for(int i=0; i<towers.size(); i++)
+        	{
+        		Tower tempTower = towers.get(i);
+    			tempTower.selected = false;
+        		if(tempTower.rec.contains(pointClicked))
+        		{
+        			tempTower.selected = true;
+        			selected = true;
+        			selectTower = tempTower;
         		}
         	}
         }       
