@@ -16,7 +16,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private final static int SIZEX = 1280;//X size of screen
 	private final static int SIZEY = 720; //Y size of screen
 	private final static double TOWERX = (932/(double)SIZEX);
-	private final static double TOWERY = (68/(double)SIZEY);
+	private final static double TOWERY = (55/(double)SIZEY);
 	private final static int SPRITEX = 100;
 	private final static int SPRITEY = 100;
 	
@@ -29,6 +29,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private String animationSpritePath = "resources/AnimationSprite.png";
 	private String animationSpritePath2 = "resources/FinalBugSheet.png";
 	private String rangeSpritePath = "resources/RangeIndicator.png";
+	private String sellImagePath = "resources/SellButton.png";
+	private String upImagePath = "resources/UpButton.png";
 	
 	private boolean gameStarted = false;
 	
@@ -55,10 +57,12 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private Image creepSpriteImage;
 	private Image creepSpriteImage2;//with direction
 	private Image rangeIndicatorImage;
+	private Image sellImage;
+	private Image upImage;
 
-	private Font customFont24;
+	private Font customFont18;
 	private Font customFont36;
-	private Font customFont60;
+	private Font customFont28;
 	private Font customFont72;
 	
 	private int counter=0;
@@ -104,6 +108,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		creepSpriteImage = loadImage(animationSpritePath);
 		creepSpriteImage2 = loadImage(animationSpritePath2);
 		rangeIndicatorImage = loadImage(rangeSpritePath);
+		sellImage = loadImage(sellImagePath);
+		upImage = loadImage(upImagePath);
 		setBackground(Color.white);
 	    addMouseListener(this);
 	    addMouseMotionListener(this);
@@ -115,9 +121,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	{                    
 		try {
 			//create the font to use. Specify the size!
-			customFont24 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(24f);
+			customFont18 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(18f);
 			customFont36 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(36f);
-			customFont60 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(60f);
+			customFont28 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(28f);
 			customFont72 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("resources/ARDESTINE.ttf")).deriveFont(72f);
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			//register the font
@@ -190,7 +196,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
 		if(gameStarted)
 		{
-			tempTower = new Tower(xpos,ypos,type,0, 300, 30, 100);
+			tempTower = new Tower(xpos,ypos,type,1, 300, 30, 100);//xpos, ypos, type, level, range, damage, reload Time
 			tempTower.setRec(xpos*w/SIZEX, ypos*h/SIZEY, towerSizeX, towerSizeY);
 			towers.add(tempTower);
 			//System.out.println("Tower added at x: "+xpos+", y:"+ypos);
@@ -228,7 +234,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 				{
 					double tempXpos = tempTower.xpos/(double)SIZEX;
 					double tempYpos = tempTower.ypos/(double)SIZEY;
-					g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, tempTower.type*SPRITEY, SPRITEX, (tempTower.type+1)*SPRITEY,this);
+					g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, SPRITEX*(tempTower.level-1), tempTower.type*SPRITEY, SPRITEX*tempTower.level, (tempTower.type+1)*SPRITEY,this);
 					if(tempTower.selected)
 					{
 						tempXpos2 = tempXpos;
@@ -241,14 +247,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			if(drawSelected)
 			{
 				g.drawImage(rangeIndicatorImage, (int)(tempXpos2*w)-(tempTower.range*w/SIZEX)/2, (int)(tempYpos2*h)-(tempTower.range*h/SIZEY)/2, (int)(tempXpos2*w)+(tempTower.range*w/SIZEX)/2,(int)(tempYpos2*h)+(tempTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
-			}
-
-			if(recSelected!=-1)
-			{		
-				double tempXpos = placeTower.xpos;
-				double tempYpos = placeTower.ypos;
-				g.drawImage(towerSpriteImage2, (int)(tempXpos)-towerSizeX/2, (int)(tempYpos)-towerSizeY/2, (int)(tempXpos)+towerSizeX/2,(int)(tempYpos)+towerSizeY/2, 0, placeTower.type*SPRITEY, SPRITEX, (placeTower.type+1)*SPRITEY,this);
-				g.drawImage(rangeIndicatorImage, (int)(tempXpos)-(placeTower.range*w/SIZEX)/2, (int)(tempYpos)-(placeTower.range*h/SIZEY)/2, (int)(tempXpos)+(placeTower.range*w/SIZEX)/2,(int)(tempYpos)+(placeTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
 			}
 			
 			//Paints Dots to show path
@@ -320,7 +318,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		    double sHeight = 720/(double)SIZEY*(double)h;
 		    
 		    g.drawImage(sideImage, (int)sXpos, (int)sYpos, (int)sWidth, (int)sHeight, this);
-		    
+
+			
 			for(int j=0; j<3; j++)//Tower Select Panel
 			{
 				for(int k=0; k<3; k++)
@@ -330,19 +329,72 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					towerRec[3*j+k] = new Rectangle ((int)((TOWERX*w)+((w-(TOWERX*w))/10)*((3*k)+1)),(int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2*j)+((h-(TOWERY*h))/36)),towerSizeX,towerSizeY);
 				}
 			}
+
+			if(recSelected!=-1)//ghost Image
+			{		
+				double tempXpos = placeTower.xpos;
+				double tempYpos = placeTower.ypos;
+				g.drawImage(towerSpriteImage2, (int)(tempXpos)-towerSizeX/2, (int)(tempYpos)-towerSizeY/2, (int)(tempXpos)+towerSizeX/2,(int)(tempYpos)+towerSizeY/2, 0, placeTower.type*SPRITEY, SPRITEX, (placeTower.type+1)*SPRITEY,this);
+				g.drawImage(rangeIndicatorImage, (int)(tempXpos)-(placeTower.range*w/SIZEX)/2, (int)(tempYpos)-(placeTower.range*h/SIZEY)/2, (int)(tempXpos)+(placeTower.range*w/SIZEX)/2,(int)(tempYpos)+(placeTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
+			}
 			
 			if(selected)//Selected Tower Stats
 			{
-				double tempXpos = (double)980/(double)SIZEX;
-				double tempYpos = (double)400/(double)SIZEY;
-				g.drawImage(towerSpriteImage, (int)(tempXpos*w)-towerSizeX/2, (int)(tempYpos*h)-towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, 0, selectTower.type*SPRITEY, SPRITEX, (selectTower.type+1)*SPRITEY,this);
-				tempXpos = (double)1020/(double)SIZEX;
-				tempYpos = (double)410/(double)SIZEY;
+				double scaleX = (double)w/(double)SIZEX;
+				double scaleY = (double)h/(double)SIZEY;
+				double tempXpos = 980;
+				double tempYpos = 350;
+				g.drawImage(towerSpriteImage, (int)(tempXpos*scaleX)-towerSizeX/2, (int)(tempYpos*scaleY)-towerSizeY/2, (int)(tempXpos*scaleX)+towerSizeX/2,(int)(tempYpos*scaleY)+towerSizeY/2, SPRITEX*(selectTower.level-1), selectTower.type*SPRITEY, SPRITEX*selectTower.level, (selectTower.type+1)*SPRITEY,this);
+				tempXpos = 1020;
+				tempYpos = 360;
 				g.setFont(customFont36);
 				g.setColor(Color.black);
-				g.drawString(selectTower.typeString + " Tower", (int)(tempXpos*w), (int) (tempYpos*h));
+				g.drawString(selectTower.typeString + " Tower", (int)(tempXpos*scaleX), (int) (tempYpos*scaleY));
+				g.setFont(customFont18);
+				g.drawString("Level: " + selectTower.level, (int)(950*scaleX), (int) (395*scaleY));
+				g.drawString("Damage: " + selectTower.damage, (int)(950*scaleX), (int) (415*scaleY));
+				g.drawString("Range: " + selectTower.range, (int)(950*scaleX), (int) (435*scaleY));
+				g.drawString(selectTower.phrase1, (int)(1070*scaleX), (int) (395*scaleY));
+				if(selectTower.phrase2 != null)
+				{
+					g.drawString(selectTower.phrase2, (int)(1070*scaleX), (int) (415*scaleY));
+				}
+				tempXpos = 1100;
+				tempYpos = 465;
+				g.drawImage(sellImage, (int)(tempXpos*scaleX)-(int)(148/2*scaleX), (int)(tempYpos*scaleY)-(int)(51/2*scaleY), (int)(tempXpos*scaleX)+(int)(148/2*scaleX),(int)(tempYpos*scaleY)+(int)(51/2*scaleY), 0, 0, 308, 106,this);
+				g.setFont(customFont28);
+				g.setColor(Color.white);
+				int adjust = (int)Math.log10(selectTower.sellPrice + 1);
+				g.drawString("Sell " + selectTower.sellPrice + "g", (int)((1054 - (int)((double)(adjust)*7.5))*scaleX), (int)(473*scaleY));
+				
+				if(selectTower.level<5)
+				{
+					tempXpos = 980;
+					tempYpos = 520;
+					g.drawImage(towerSpriteImage, (int)(tempXpos*scaleX)-towerSizeX/2, (int)(tempYpos*scaleY)-towerSizeY/2, (int)(tempXpos*scaleX)+towerSizeX/2,(int)(tempYpos*scaleY)+towerSizeY/2, SPRITEX*selectTower.level, selectTower.type*SPRITEY, SPRITEX*(selectTower.level+1), (selectTower.type+1)*SPRITEY,this);
+					g.setFont(customFont36);
+					g.setColor(Color.black);
+					tempXpos = 1020;
+					tempYpos = 530;
+					g.drawString("Next Level", (int)(tempXpos*scaleX), (int) (tempYpos*scaleY));
+					g.setFont(customFont18);
+					g.drawString("Level: " + selectTower.level, (int)(950*scaleX), (int) (565*scaleY));
+					g.drawString("Damage: " + selectTower.damage, (int)(950*scaleX), (int) (585*scaleY));
+					g.drawString("Range: " + selectTower.range, (int)(950*scaleX), (int) (605*scaleY));
+					g.drawString(selectTower.phrase1, (int)(1070*scaleX), (int) (565*scaleY));
+					if(selectTower.phrase2 != null)
+					{
+						g.drawString(selectTower.phrase2, (int)(1070*scaleX), (int) (585*scaleY));
+					}				
+					tempXpos = 1100;
+					tempYpos = 635;
+					g.drawImage(upImage, (int)(tempXpos*scaleX)-(int)(210/2*scaleX), (int)(tempYpos*scaleY)-(int)(51/2*scaleY), (int)(tempXpos*scaleX)+(int)(210/2*scaleX),(int)(tempYpos*scaleY)+(int)(51/2*scaleY), 0, 0, 438, 106,this);
+					g.setFont(customFont28);
+					g.setColor(Color.white);
+					adjust = (int)Math.log10(selectTower.upPrice + 1);
+					g.drawString("Upgrade " + selectTower.upPrice + "g", (int)((1025 - (int)((double)(adjust)*7.5))*scaleX), (int)(643*scaleY));
+				}
 			}
-			
 		    counter++;	
 		}
 	}
