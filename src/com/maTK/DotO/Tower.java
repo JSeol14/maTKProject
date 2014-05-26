@@ -37,8 +37,8 @@ public class Tower {
 	
 	public Tower (int initX, int initY, int t, int l, int r, int dmg, int rT)
 	{
-		upPrice = 300;
-		sellPrice = 30;
+		upPrice = 1;
+		sellPrice = 1;
 		xpos = initX;
 		ypos = initY;
 		type = t;

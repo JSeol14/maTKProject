@@ -37,8 +37,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private static int towerSizeX; 
 	private static int towerSizeY;
 	
-	private int score;//In-game score
-	private int gold;//Amount of gold currently in bank
+	private int score = 0;//In-game score
+	private int gold = 1000000000;//Amount of gold currently in bank
 	private int waveNum;//Counter of which wave the player is facing
 	private int originHP = 100;//HP of the origin
 	private int recSelected = -1;
@@ -71,6 +71,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	
 	private Tower selectTower;
 	private boolean selected = false;
+	private int selNum = 0;
+	private Rectangle sellRec;// = new Rectangle(0,0,0,0);
+	private Rectangle upgradeRec;// = new Rectangle(0,0,0,0);
 	
 	Thread thread;
 
@@ -361,12 +364,14 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 				}
 				tempXpos = 1100;
 				tempYpos = 465;
+				sellRec = new Rectangle((int)(tempXpos*scaleX)-(int)(148/2*scaleX), (int)(tempYpos*scaleY)-(int)(51/2*scaleY),(int)(148*scaleX), (int)(51*scaleY));
 				g.drawImage(sellImage, (int)(tempXpos*scaleX)-(int)(148/2*scaleX), (int)(tempYpos*scaleY)-(int)(51/2*scaleY), (int)(tempXpos*scaleX)+(int)(148/2*scaleX),(int)(tempYpos*scaleY)+(int)(51/2*scaleY), 0, 0, 308, 106,this);
 				g.setFont(customFont28);
 				g.setColor(Color.white);
 				int adjust = (int)Math.log10(selectTower.sellPrice + 1);
 				g.drawString("Sell " + selectTower.sellPrice + "g", (int)((1054 - (int)((double)(adjust)*7.5))*scaleX), (int)(473*scaleY));
 				
+				upgradeRec = new Rectangle(0,0,0,0);
 				if(selectTower.level<5)
 				{
 					tempXpos = 980;
@@ -388,6 +393,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					}				
 					tempXpos = 1100;
 					tempYpos = 635;
+					upgradeRec = new Rectangle((int)(tempXpos*scaleX)-(int)(210/2*scaleX), (int)(tempYpos*scaleY)-(int)(51/2*scaleY), (int)(210*scaleX), (int)(51*scaleY));
 					g.drawImage(upImage, (int)(tempXpos*scaleX)-(int)(210/2*scaleX), (int)(tempYpos*scaleY)-(int)(51/2*scaleY), (int)(tempXpos*scaleX)+(int)(210/2*scaleX),(int)(tempYpos*scaleY)+(int)(51/2*scaleY), 0, 0, 438, 106,this);
 					g.setFont(customFont28);
 					g.setColor(Color.white);
@@ -541,17 +547,41 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
                 	recSelected = i;
         		}
         	}
-			selected = false;
+        	boolean clickTower = false;
         	for(int i=0; i<towers.size(); i++)
         	{
         		Tower tempTower = towers.get(i);
     			tempTower.selected = false;
         		if(tempTower.rec.contains(pointClicked))
         		{
+        			selNum = i;
         			tempTower.selected = true;
         			selected = true;
         			selectTower = tempTower;
+        			clickTower = true;
         		}
+        	}
+        	if(xvar>(int)(936*(double)w/(double)SIZEX) && yvar>(int)(320*(double)h/(double)SIZEY))
+        	{
+            	if(selected)
+            	{
+        			tempTower.selected = true;
+            		if(sellRec.contains(pointClicked))
+            		{
+            			gold += selectTower.sellPrice;
+            			towers.remove(selNum);
+            			selected = false;
+            		} 
+            		if(upgradeRec.contains(pointClicked))
+            		{
+            			gold -= selectTower.upPrice;
+            			selectTower.upgrade();
+            		}
+            	}
+        	}
+        	else
+        	{
+        		selected = clickTower;
         	}
         }       
         if(!gameStarted)
