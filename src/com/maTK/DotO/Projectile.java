@@ -12,6 +12,8 @@ public class Projectile {
 	public double speed = 2;//speed of projectile
 	public boolean isAlive = true;//tells whether projectile exists
 	public double dir;//corresponds to direction projectile is facing (radians)
+	public int type;//corresponds to type of projectile
+	public int level;//corresponds to level of projectile
 	
 	public int splashRadius = 1;//radius of projectile splash, default hits only target, splash has much less dmg
 	public int extraGold = 0;//extra gold from creep kill
@@ -22,17 +24,17 @@ public class Projectile {
 	public double slowTime = 0;//duration of slow
 	public int freezeChance = 0;//percent chance of freeze (0-100)
 	public double freezeTime = 0;//duration of freeze
-	public int chainChance = 0;//chance of chain to another creep
-	public int chainRange = 0;//range of chain to another creep
 	public int trueSightRange = 0;//range of tower true sight
 	public int confusionChance = 0;//chance of confusing creep
 	public double confusionTime = 0;//duration of confusion
 	public Creep Target;//target creep
 	
-	public Projectile (int initXpos, int initYpos, int dmg, Creep target)
+	public Projectile (int initXpos, int initYpos, int dmg, int t, int l, Creep target)
 	{
 		Target = target;
 		damage = dmg;
+		type = t;
+		level = l;
 		xpos = initXpos;
 		ypos = initYpos;
 		aXpos = xpos;
@@ -109,12 +111,6 @@ public class Projectile {
 	{
 		freezeChance = freeze;
 		freezeTime = freezeDur;
-	}
-	
-	public void setChain(int chain, int range)
-	{
-		chainChance = chain;
-		chainRange = range;
 	}
 	
 	public void setTrueSight(int range)

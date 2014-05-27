@@ -249,7 +249,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			
 			if(drawSelected)
 			{
-				g.drawImage(rangeIndicatorImage, (int)(tempXpos2*w)-(tempTower.range*w/SIZEX)/2, (int)(tempYpos2*h)-(tempTower.range*h/SIZEY)/2, (int)(tempXpos2*w)+(tempTower.range*w/SIZEX)/2,(int)(tempYpos2*h)+(tempTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
+				g.drawImage(rangeIndicatorImage, (int)(tempXpos2*w)-(selectTower.range*w/SIZEX)/2, (int)(tempYpos2*h)-(selectTower.range*h/SIZEY)/2, (int)(tempXpos2*w)+(selectTower.range*w/SIZEX)/2,(int)(tempYpos2*h)+(selectTower.range*h/SIZEY)/2, 0, 0, 1000, 1000,this);
 			}
 			
 			//Paints Dots to show path
@@ -268,11 +268,14 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			
 			for(int i=0; i<projectiles.size(); i++)
 			{
-				g.setColor(Color.red);
 				Projectile tempProjectile = projectiles.get(i);
 				double tempXpos = tempProjectile.xpos/(double)SIZEX;
 				double tempYpos = tempProjectile.ypos/(double)SIZEY;
-				g.fillRect((int)(tempXpos*w), (int)(tempYpos*h), 2, 2);
+				double projectileSizeX = 30/(double)SIZEX;
+				double projectileSizeY = 30/(double)SIZEY;
+				g.drawImage(towerSpriteImage, (int)(tempXpos*w)-(int)(projectileSizeX*w/2), (int)(tempYpos*h)-(int)(projectileSizeY*h/2), (int)((tempXpos)*w)+(int)(projectileSizeX*w/2),(int)((tempYpos)*h)+(int)(projectileSizeY*h/2), SPRITEX*(tempProjectile.level-1), tempProjectile.type*SPRITEY, SPRITEX*tempProjectile.level, (tempProjectile.type+1)*SPRITEY,this);				
+				//g.setColor(Color.red);
+				//g.fillRect((int)(tempXpos*w), (int)(tempYpos*h), 2, 2);
 			}
 			
 		    for(int i=0; i<creepWave.size(); i++)
@@ -295,7 +298,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 				double tempXpos = tempCreep.xpos/(double)SIZEX;
 				double tempYpos = tempCreep.ypos/(double)SIZEY;
 				//g.drawImage(creepSpriteImage, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, animTemp, (tempCreep.type)*SPRITEY, animTemp + SPRITEX, (tempCreep.type + 1)*SPRITEY,this);
-				
 				
 				if(tempCreep.dir2>=-17 && tempCreep.dir2<=-10)
 				{
@@ -543,7 +545,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         	{
         		if(towerRec[i].contains(pointClicked))
         		{
-        			placeTower = new Tower(xvar,yvar,i,0, 300, 1, 10);
+        			placeTower = new Tower(xvar,yvar,i,1, 300, 30, 100);
                 	recSelected = i;
         		}
         	}

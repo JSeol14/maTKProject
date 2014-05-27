@@ -13,8 +13,8 @@ public class Tower {
 	public int upPrice;//cost to upgrade	
 	public int sellPrice;//money from selling
 	public boolean isAlive;//alive or not
-	public int reloadTime;//number of frames between bullets
-	public int reloadCount;//counter of frames between bullets
+	public int reloadTime;//counter of frames between bullets
+	public int reloadCount;//number of frames between bullets
 	public boolean selected = false;
 	public Rectangle rec;
 	public String phrase1;
@@ -29,8 +29,7 @@ public class Tower {
 	public double slowTime = 0;//duration of slow
 	public int freezeChance = 0;//percent chance of freeze (0-100)
 	public double freezeTime = 0;//duration of freeze
-	public int chainChance = 0;//chance of chain to another creep
-	public int chainRange = 0;//range of chain to another creep
+	//reloadTime serves for rapid tower
 	public int trueSightRange = 0;//range of tower true sight
 	public int confusionChance = 0;//chance of confusing creep
 	public double confusionTime = 0;//duration of confusion
@@ -48,41 +47,7 @@ public class Tower {
 		damage = dmg;
 		reloadTime = rT;
 		reloadCount = reloadTime;
-		switch(type)
-		{
-			case 0: typeString = "Splash";
-				phrase1 = "Splash Radius: " + splashRadius;
-				break;
-			case 1: typeString = "Gold";
-				phrase1 = "Gold/Kill: " + extraGold;
-				break;
-			case 2: typeString = "Range";
-				phrase1 = "Extra Range: " + extraRange;
-				break;
-			case 3: typeString = "Poison";
-				phrase1 = "Poison Dmg: " + poisonDmg;
-				phrase2 = "Poison Time: " + (int)poisonTime;
-				break;
-			case 4: typeString = "Slow";
-				phrase1 = "Slow Amount: " + (int)((100-(slowPercent*100))) + "%";
-				phrase2 = "Slow Time: " + slowTime;
-				break;
-			case 5: typeString = "Freeze";
-				phrase1 = "Freeze Chance: " + freezeChance + "%";
-				phrase2 = "Freeze Time: " + freezeTime;
-				break;
-			case 6: typeString = "Chain";
-				phrase1 = "Chain Chance: " + chainChance + "%";
-				phrase2 = "Chain Range: " + chainRange;
-				break;
-			case 7: typeString = "Sight";
-				phrase1 = "Sight Range: " + trueSightRange;
-				break;
-			case 8: typeString = "Dizzy";
-				phrase1 = "Dizzy Chance: " + confusionChance + "%";
-				phrase2 = "Dizzy Time: " + confusionTime;
-				break;
-		}
+		setEffects();
 	}
 	
 	public void setRec(int x, int y, int w, int h)
@@ -95,11 +60,64 @@ public class Tower {
 		level++;
 		upPrice = level;//Gives price of upgrade to next level
 		sellPrice = level;//Gives the value of the tower if sold
+		setEffects();
+	}
+	
+	public void setEffects()
+	{
+		switch(type)
+		{
+			case 0: typeString = "Splash";
+				splashRadius = 50*level;
+				phrase1 = "Splash Radius: " + splashRadius;
+				break;
+			case 1: typeString = "Gold";
+				extraGold = 50*level;
+				phrase1 = "Gold/Kill: " + extraGold;
+				break;
+			case 2: typeString = "Range";
+				extraRange = 50*level;
+				range = 300 + extraRange;
+				phrase1 = "Extra Range: " + extraRange;
+				break;
+			case 3: typeString = "Poison";
+				poisonDmg = 2*level;//poison damage per second
+				poisonTime = 5000;//duration in milliseconds
+				phrase1 = "Poison Dmg: " + poisonDmg;
+				phrase2 = "Poison Time: " + (int)(poisonTime/1000);
+				break;
+			case 4: typeString = "Slow";
+				slowPercent = 1-0.15*level;
+				slowTime = 2000;
+				phrase1 = "Slow Amount: " + (int)((100-(slowPercent*100))) + "%";
+				phrase2 = "Slow Time: " + (int)(slowTime/1000);
+				break;
+			case 5: typeString = "Freeze";
+				freezeChance = 30;
+				freezeTime = 1000*level;
+				phrase1 = "Freeze Chance: " + freezeChance + "%";
+				phrase2 = "Freeze Time: " + (int)(freezeTime/1000);
+				break;
+			case 6: typeString = "Rapid"; 
+				reloadCount = 100-10*level;
+				phrase1 = "Reload Time: " + (double)reloadCount/1000;
+				break;
+			case 7: typeString = "Sight";
+				trueSightRange = 300+100*level;
+				phrase1 = "Sight Range: " + trueSightRange;
+				break;
+			case 8: typeString = "Dizzy";
+				confusionChance = 30;
+				confusionTime = 500*level;
+				phrase1 = "Dizzy Chance: " + confusionChance + "%";
+				phrase2 = "Dizzy Time: " + (double)(confusionTime/1000);
+				break;
+		}
 	}
 	
 	public Projectile fire(Creep target)
 	{
-		Projectile temp = new Projectile(xpos, ypos, damage, target);
+		Projectile temp = new Projectile(xpos, ypos, damage, type, level, target);
 		return(temp);
 	}
 }
