@@ -15,18 +15,18 @@ public class Projectile {
 	public int type;//corresponds to type of projectile
 	public int level;//corresponds to level of projectile
 	
-	public int splashRadius = 1;//radius of projectile splash, default hits only target, splash has much less dmg
+	public int splashRadius = 0;//radius of projectile splash, default hits only target, splash has much less dmg
 	public int extraGold = 0;//extra gold from creep kill
 	public int extraRange = 0;//extra range of tower
 	public int poisonDmg = 0;//Poison dps
-	public double poisonTime = 0;//duration of poison
+	public int poisonTime = 0;//duration of poison
 	public double slowPercent = 1;//slow effect, multiplier for creep speed
-	public double slowTime = 0;//duration of slow
+	public int slowTime = 0;//duration of slow
 	public int freezeChance = 0;//percent chance of freeze (0-100)
-	public double freezeTime = 0;//duration of freeze
+	public int freezeTime = 0;//duration of freeze
 	public int trueSightRange = 0;//range of tower true sight
 	public int confusionChance = 0;//chance of confusing creep
-	public double confusionTime = 0;//duration of confusion
+	public int confusionTime = 0;//duration of confusion
 	public Creep Target;//target creep
 	
 	public Projectile (int initXpos, int initYpos, int dmg, int t, int l, Creep target)
@@ -71,6 +71,22 @@ public class Projectile {
 			if(Math.abs(Target.xpos - xpos)<=1 && Math.abs(Target.ypos - ypos)<=1)
 			{
 				Target.curHp -= damage;
+				Target.slowPercent = slowPercent;
+				Target.slowTimer = slowTime;
+				Target.poisonDmg = poisonDmg;
+				Target.poisonTimer = poisonTime;
+				if(splashRadius>0)
+				{
+					Target.splash = true;
+					Target.splashRadius = splashRadius;
+					Target.splashDamage = damage;
+				}
+				int chance = (int)(Math.random()*100);
+				if(chance<freezeChance)
+				{
+					Target.frozen = true;
+					Target.freezeTimer = freezeTime;
+				}
 				if(Target.curHp <=0)
 				{
 					Target.isAlive = false;
@@ -95,19 +111,19 @@ public class Projectile {
 		extraRange = range;
 	}
 	
-	public void setPoision(int poison, double poisonDur)
+	public void setPoision(int poison, int poisonDur)
 	{
 		poisonDmg = poison;
 		poisonTime = poisonDur;
 	}
 	
-	public void setSlow(double slow, double slowDur)
+	public void setSlow(double slow, int slowDur)
 	{
 		slowPercent = slow;
 		slowTime = slowDur;
 	}
 	
-	public void setFreeze(int freeze, double freezeDur)
+	public void setFreeze(int freeze, int freezeDur)
 	{
 		freezeChance = freeze;
 		freezeTime = freezeDur;
@@ -118,7 +134,7 @@ public class Projectile {
 		trueSightRange = range;
 	}
 	
-	public void setConfusion(int confusion, double confusionDur)
+	public void setConfusion(int confusion, int confusionDur)
 	{
 		confusionChance = confusion;
 		confusionTime = confusionDur;

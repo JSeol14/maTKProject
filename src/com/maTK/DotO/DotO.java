@@ -19,7 +19,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private final static double TOWERY = (55/(double)SIZEY);
 	private final static int SPRITEX = 100;
 	private final static int SPRITEY = 100;
-	
+	private final static int DELAY = 5;
 	
 	private String backgroundPath = "resources/Background2.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
 	private String sideImagePath = "resources/SideBar.png";
@@ -145,7 +145,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			try {
 				repaint();
 				doStuff();
-				thread.sleep(5);
+				thread.sleep(DELAY);
 				//System.out.println(originHP);
 			} catch (InterruptedException e) {
 			
@@ -199,7 +199,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
 		if(gameStarted)
 		{
-			tempTower = new Tower(xpos,ypos,type,1, 300, 30, 100);//xpos, ypos, type, level, range, damage, reload Time
+			tempTower = new Tower(xpos,ypos,type,1, 300, 5, 100);//xpos, ypos, type, level, range, damage, reload Time
 			tempTower.setRec(xpos*w/SIZEX, ypos*h/SIZEY, towerSizeX, towerSizeY);
 			towers.add(tempTower);
 			//System.out.println("Tower added at x: "+xpos+", y:"+ypos);
@@ -316,6 +316,20 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					g.drawImage(creepSpriteImage2, (int)(tempXpos*w) - towerSizeX/2, (int)(tempYpos*h) - towerSizeY/2, (int)((tempXpos)*w)+towerSizeX/2,(int)((tempYpos)*h)+towerSizeY/2, (int)(animTemp*10 + (18-tempCreep.dir2)*100 + SPRITEX), (tempCreep.type)*SPRITEY, (int)(animTemp*10 + (18-tempCreep.dir2)*100), (tempCreep.type + 1)*SPRITEY,this);
 				}
 			}
+		    for(int i=0; i<creepWave.size(); i++)
+		    {
+		    	Creep tempCreep = creepWave.get(i);
+				double tempXpos = tempCreep.xpos/(double)SIZEX;
+				double tempYpos = tempCreep.ypos/(double)SIZEY;
+				
+				g.setColor(Color.black);
+				g.fillRect((int)(tempXpos*w)-(int)((double)40/SIZEX*w)-1, (int)(tempYpos*h)-(int)((double)50/SIZEY*h)-1, (int)((double)80/SIZEX*w)+2, (int)((double)10/SIZEY*h)+2);
+				g.setColor(Color.red);
+				g.fillRect((int)(tempXpos*w)-(int)((double)40/SIZEX*w), (int)(tempYpos*h)-(int)((double)50/SIZEY*h), (int)((double)80/SIZEX*w), (int)((double)10/SIZEY*h));
+				g.setColor(Color.green);
+				g.fillRect((int)(tempXpos*w)-(int)((double)40/SIZEX*w), (int)(tempYpos*h)-(int)((double)50/SIZEY*h), (int)((double)80/SIZEX*w*(double)tempCreep.curHp/(double)tempCreep.maxHp), (int)((double)10/SIZEY*h));
+		    	
+		    }
 		    
 		    double sXpos = 936/(double)SIZEX*(double)w;
 		    double sYpos = 0/(double)SIZEY*(double)h;
@@ -415,7 +429,24 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    for(int i=0; i<creepWave.size(); i++)
 	    {
 	    	Creep tempCreep = creepWave.get(i);
-	    	tempCreep.move((double)((double)w/(double)SIZEX));
+	    	tempCreep.move(DELAY);
+	    	if(tempCreep.splash)
+	    	{
+	    	    for(int a=0; a<creepWave.size(); a++)
+	    	    {
+	    	    	Creep tempCreep2 = creepWave.get(a);
+		    		double distance = Math.sqrt(Math.pow((tempCreep2.xpos - tempCreep.xpos),2) + Math.pow((tempCreep2.ypos - tempCreep.ypos),2));
+	    	    	if(a!=i && distance<= tempCreep.splashRadius)
+	    	    	{
+	    	    		tempCreep2.curHp-=tempCreep.splashDamage;
+	    				if(tempCreep2.curHp <=0)
+	    				{
+	    					tempCreep2.isAlive = false;
+	    				}
+	    	    	}
+	    	    }
+	    	    tempCreep.splash = false;
+	    	}
 			if(tempCreep.isAlive)
 			{
 				if(Math.abs(tempCreep.xpos - tempCreep.nextPoint.x)<=1 && Math.abs(tempCreep.ypos - tempCreep.nextPoint.y)<=1)
@@ -545,29 +576,17 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         	{
         		if(towerRec[i].contains(pointClicked))
         		{
-        			placeTower = new Tower(xvar,yvar,i,1, 300, 30, 100);
+        			placeTower = new Tower(xvar,yvar,i,1, 300, 5, 100);
                 	recSelected = i;
         		}
         	}
         	boolean clickTower = false;
-        	for(int i=0; i<towers.size(); i++)
-        	{
-        		Tower tempTower = towers.get(i);
-    			tempTower.selected = false;
-        		if(tempTower.rec.contains(pointClicked))
-        		{
-        			selNum = i;
-        			tempTower.selected = true;
-        			selected = true;
-        			selectTower = tempTower;
-        			clickTower = true;
-        		}
-        	}
+        	boolean clickIn = false;
         	if(xvar>(int)(936*(double)w/(double)SIZEX) && yvar>(int)(320*(double)h/(double)SIZEY))
         	{
+    			clickIn = true;
             	if(selected)
             	{
-        			tempTower.selected = true;
             		if(sellRec.contains(pointClicked))
             		{
             			gold += selectTower.sellPrice;
@@ -581,9 +600,21 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
             		}
             	}
         	}
-        	else
+        	for(int i=0; i<towers.size(); i++)
         	{
-        		selected = clickTower;
+        		Tower tempTower = towers.get(i);
+        		if(!clickIn)
+        		{
+        			tempTower.selected = false;
+        		}
+        		if(tempTower.rec.contains(pointClicked))
+        		{
+        			selNum = i;
+        			tempTower.selected = true;
+        			selected = true;
+        			selectTower = tempTower;
+        			clickTower = true;
+        		}
         	}
         }       
         if(!gameStarted)

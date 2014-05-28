@@ -24,6 +24,16 @@ public class Creep {
 	public Road path;//path of travel
 	public int pathNum = 0;//number of which point the creep is on
 	public Point nextPoint;//nextPoint on path
+	public double slowPercent = 1;//multiplier for speed
+	public boolean frozen = false;//stops movement when frozen
+	public int slowTimer = 0;
+	public int freezeTimer = 0;
+	public int poisonDmg = 0;
+	public int poisonTimer = 0;
+	public int poisonCounter = 0;
+	public boolean splash = false;
+	public int splashRadius = 0;
+	public int splashDamage = 0;
 	
 	public Creep(int hp, double spd, int damage, int gold, int t)
 	{
@@ -67,14 +77,49 @@ public class Creep {
 		}
 	}
 	
-	public void move(double scale)
+	public void move(int delay)
 	{
 		if(isAlive)
 		{
-			double difX = Math.cos(dir)*speed*scale;
-			double difY = Math.sin(dir)*speed*scale;
-			aXpos += difX;
-			aYpos += difY;
+			double difX = Math.cos(dir)*speed*slowPercent;
+			double difY = Math.sin(dir)*speed*slowPercent;
+			if(slowTimer>0)
+			{
+				slowTimer-=delay;
+			}
+			if(slowTimer<=0)
+			{
+				slowPercent = 1;
+			}
+			if(poisonTimer>0)
+			{
+				poisonTimer-=delay;
+				if(poisonCounter == 0)
+				{
+					curHp-=poisonDmg;
+					poisonCounter = 1000/delay;
+				}
+				poisonCounter--;
+			}
+			if(poisonTimer<=0)
+			{
+				poisonDmg = 0;
+			}
+			
+			if(!frozen)
+			{
+				aXpos += difX;
+				aYpos += difY;
+			}
+			else
+			{
+				freezeTimer-=delay;
+				if(freezeTimer <=0)
+				{
+					frozen = false;
+				}
+			}
+			
 			if(difX>=0)
 			{
 				xpos = (int) Math.floor(aXpos);

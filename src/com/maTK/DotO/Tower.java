@@ -24,15 +24,15 @@ public class Tower {
 	public int extraGold = 0;//extra gold from creep kill
 	public int extraRange = 0;//extra range of tower
 	public int poisonDmg = 0;//Poison dps
-	public double poisonTime = 0;//duration of poison
+	public int poisonTime = 0;//duration of poison
 	public double slowPercent = 1;//slow effect, multiplier for creep speed
-	public double slowTime = 0;//duration of slow
+	public int slowTime = 0;//duration of slow
 	public int freezeChance = 0;//percent chance of freeze (0-100)
-	public double freezeTime = 0;//duration of freeze
+	public int freezeTime = 0;//duration of freeze
 	//reloadTime serves for rapid tower
 	public int trueSightRange = 0;//range of tower true sight
 	public int confusionChance = 0;//chance of confusing creep
-	public double confusionTime = 0;//duration of confusion
+	public int confusionTime = 0;//duration of confusion
 	
 	public Tower (int initX, int initY, int t, int l, int r, int dmg, int rT)
 	{
@@ -58,6 +58,7 @@ public class Tower {
 	public void upgrade()//Upgrades tower to next level
 	{
 		level++;
+		damage = 5+level;
 		upPrice = level;//Gives price of upgrade to next level
 		sellPrice = level;//Gives the value of the tower if sold
 		setEffects();
@@ -76,25 +77,25 @@ public class Tower {
 				phrase1 = "Gold/Kill: " + extraGold;
 				break;
 			case 2: typeString = "Range";
-				extraRange = 50*level;
+				extraRange = 70*level;
 				range = 300 + extraRange;
 				phrase1 = "Extra Range: " + extraRange;
 				break;
 			case 3: typeString = "Poison";
-				poisonDmg = 2*level;//poison damage per second
+				poisonDmg = 1*level;//poison damage per second
 				poisonTime = 5000;//duration in milliseconds
 				phrase1 = "Poison Dmg: " + poisonDmg;
 				phrase2 = "Poison Time: " + (int)(poisonTime/1000);
 				break;
 			case 4: typeString = "Slow";
-				slowPercent = 1-0.15*level;
-				slowTime = 2000;
+				slowPercent = 1-0.12*level;
+				slowTime = 1500 + 400*level;
 				phrase1 = "Slow Amount: " + (int)((100-(slowPercent*100))) + "%";
 				phrase2 = "Slow Time: " + (int)(slowTime/1000);
 				break;
 			case 5: typeString = "Freeze";
 				freezeChance = 30;
-				freezeTime = 1000*level;
+				freezeTime = 500*level;
 				phrase1 = "Freeze Chance: " + freezeChance + "%";
 				phrase2 = "Freeze Time: " + (int)(freezeTime/1000);
 				break;
@@ -118,6 +119,34 @@ public class Tower {
 	public Projectile fire(Creep target)
 	{
 		Projectile temp = new Projectile(xpos, ypos, damage, type, level, target);
+		switch(type)
+		{
+			case 0:
+				temp.setSplash(splashRadius);
+				break;
+			case 1: 
+				temp.setExtraGold(extraGold);
+				break;
+			case 2: 
+				break;
+			case 3:
+				temp.setPoision(poisonDmg, poisonTime);
+				break;
+			case 4: 
+				temp.setSlow(slowPercent, slowTime);
+				break;
+			case 5: 
+				temp.setFreeze(freezeChance, freezeTime);
+				break;
+			case 6:
+				break;
+			case 7: 
+				temp.setTrueSight(trueSightRange);
+				break;
+			case 8: 
+				temp.setConfusion(confusionChance, confusionTime);
+				break;
+		}
 		return(temp);
 	}
 }
