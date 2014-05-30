@@ -281,9 +281,28 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		    for(int i=0; i<creepWave.size(); i++)
 		    {
 		    	Creep tempCreep = creepWave.get(i);
-		    	int tempInt = counter%30;
+		    	
+		    	//System.out.println(tempCreep.confuseTimer);
+		    	/*
+		    	if(tempCreep.confused)
+		    	{
+					for(int a=0; i<tempCreep.confPath.points.size(); i++)
+					{
+						for(int z=0; z<tempCreep.confPath.points.size(); z++)
+						{
+							Point p = tempCreep.confPath.points.get(z);
+							g.setColor(Color.red);
+							g.fillRect((int)((double)p.x/(double)SIZEX*(double)w), (int)((double)p.y/(double)SIZEY*(double)h), 3, 3);
+						}
+					}
+		    	}
+				g.setColor(Color.blue);
+				g.fillRect((int)((double)tempCreep.nextPoint.x/(double)SIZEX*(double)w), (int)((double)tempCreep.nextPoint.y/(double)SIZEY*(double)h), 3, 3);
+				*/
+		    	
+		    	int tempInt = counter%26;
 		    	int animTemp;
-		    	if(tempInt<15)
+		    	if(tempInt<13)
 		    	{
 		    		animTemp = 0;
 		    	}
@@ -429,6 +448,12 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    for(int i=0; i<creepWave.size(); i++)
 	    {
 	    	Creep tempCreep = creepWave.get(i);
+	    	if(tempCreep.confuseHit && !tempCreep.confused)
+	    	{
+	    		tempCreep.confuseHit = false;
+	    		tempCreep.confused = true;
+	    		tempCreep.confusePath();
+	    	}
 	    	tempCreep.move(DELAY);
 	    	if(tempCreep.splash)
 	    	{
@@ -706,7 +731,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    p.addPoint(361, 354);
 	    p.addPoint(397, 360);
 	    roads.add(p);
-	    for(int i=0; i<4; i++)
+	    for(int i=0; i<1; i++)
 	    {
 	    	creepWave.add(new Creep(100, 0.4, 1, 10,i+4));
 		    creepWave.get(i).addPath(roads.get(i));

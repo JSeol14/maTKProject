@@ -58,7 +58,7 @@ public class Tower {
 	public void upgrade()//Upgrades tower to next level
 	{
 		level++;
-		damage = 5+level;
+		damage = 1;//5+level;
 		upPrice = level;//Gives price of upgrade to next level
 		sellPrice = level;//Gives the value of the tower if sold
 		setEffects();
@@ -109,9 +109,9 @@ public class Tower {
 				break;
 			case 8: typeString = "Dizzy";
 				confusionChance = 30;
-				confusionTime = 500*level;
+				confusionTime = 600*level;
 				phrase1 = "Dizzy Chance: " + confusionChance + "%";
-				phrase2 = "Dizzy Time: " + (double)(confusionTime/1000);
+				phrase2 = "Dizzy Time: " + (double)((double)confusionTime/(double)1000);
 				break;
 		}
 	}

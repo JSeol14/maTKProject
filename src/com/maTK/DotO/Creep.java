@@ -21,7 +21,8 @@ public class Creep {
 	public boolean isAlive;//Creep's alive/dead status
 	public int goldNum;//Amount of gold received for creep kill
 	public int dmg;//dmg/lives taken away when creep attacks the Origin
-	public Road path;//path of travel
+	public Road path = new Road();//path of travel
+	public Road confPath = new Road();//path of travel when confused
 	public int pathNum = 0;//number of which point the creep is on
 	public Point nextPoint;//nextPoint on path
 	public double slowPercent = 1;//multiplier for speed
@@ -34,6 +35,9 @@ public class Creep {
 	public boolean splash = false;
 	public int splashRadius = 0;
 	public int splashDamage = 0;
+	public boolean confused = false;
+	public boolean confuseHit = false;
+	public int confuseTimer = 0;
 	
 	public Creep(int hp, double spd, int damage, int gold, int t)
 	{
@@ -49,7 +53,7 @@ public class Creep {
 	public void addPath(Road p)
 	{
 		path = p;//set Path
-		Point temp = ((Point) path.points.get(0));//get first point
+		Point temp = path.points.get(0);//get first point
 		xpos = temp.x;//set Location to start of path
 		ypos = temp.y;//set Location to start of path
 		aXpos = xpos;
@@ -57,23 +61,75 @@ public class Creep {
 		reachPoint();//set next point
 	}
 	
-	public boolean reachPoint()
+	public void confusePath()
 	{
-		pathNum++;
+		for(int i=pathNum; i>=0; i--)
+		{
+			Point tPoint = path.points.get(i);
+			confPath.addPoint(tPoint.x, tPoint.y);
+		}
+		nextPoint = confPath.points.get(1);
+		int difX = nextPoint.x - xpos;
+		int difY = nextPoint.y - ypos;
+		dir = Math.atan2(difY, difX);
+		dir2 = (int)(Math.toDegrees(dir)/10);
+		slope = (double)(difY)/(double)(difX);
+	}
+	
+	public void unconfuse()
+	{
 		if(pathNum<path.points.size())
 		{
-			nextPoint = ((Point) path.points.get(pathNum));
+			confPath.points.clear();
+			nextPoint = path.points.get(pathNum);
 			int difX = nextPoint.x - xpos;
 			int difY = nextPoint.y - ypos;
 			dir = Math.atan2(difY, difX);
 			dir2 = (int)(Math.toDegrees(dir)/10);
 			slope = (double)(difY)/(double)(difX);
-			//System.out.println("NEXT POINT dx: " + difX + " dy: " + difY + " dir: " + dir);
-			return false;
+		}
+	}
+	
+	public boolean reachPoint()
+	{
+		if(!confused)
+		{
+			pathNum++;
+			if(pathNum<path.points.size())
+			{
+				nextPoint = path.points.get(pathNum);
+				int difX = nextPoint.x - xpos;
+				int difY = nextPoint.y - ypos;
+				dir = Math.atan2(difY, difX);
+				dir2 = (int)(Math.toDegrees(dir)/10);
+				slope = (double)(difY)/(double)(difX);
+				//System.out.println("NEXT POINT dx: " + difX + " dy: " + difY + " dir: " + dir);
+				return false;
+			}
+			else
+			{
+				return true;//reached last point
+			}
 		}
 		else
 		{
-			return true;//reached last point
+			pathNum--;
+			int adjustInt = path.points.size()-confPath.points.size();
+			if(pathNum>=0)
+			{
+				nextPoint = path.points.get(pathNum);
+				int difX = nextPoint.x - xpos;
+				int difY = nextPoint.y - ypos;
+				dir = Math.atan2(difY, difX);
+				dir2 = (int)(Math.toDegrees(dir)/10);
+				slope = (double)(difY)/(double)(difX);
+				//System.out.println("NEXT POINT dx: " + difX + " dy: " + difY + " dir: " + dir);
+				return false;
+			}
+			else
+			{
+				return true;//reached last point
+			}
 		}
 	}
 	
@@ -83,6 +139,15 @@ public class Creep {
 		{
 			double difX = Math.cos(dir)*speed*slowPercent;
 			double difY = Math.sin(dir)*speed*slowPercent;
+			if(confuseTimer>0 && confused)
+			{
+				confuseTimer-=delay;
+				if(confuseTimer <= 0)
+				{
+					confused = false;
+					unconfuse();
+				}
+			}
 			if(slowTimer>0)
 			{
 				slowTimer-=delay;

@@ -87,6 +87,12 @@ public class Projectile {
 					Target.frozen = true;
 					Target.freezeTimer = freezeTime;
 				}
+				chance = (int)(Math.random()*100);
+				if(chance<confusionChance && Target.confused == false)
+				{
+					Target.confuseHit = true;
+					Target.confuseTimer = confusionTime;
+				}
 				if(Target.curHp <=0)
 				{
 					Target.isAlive = false;
