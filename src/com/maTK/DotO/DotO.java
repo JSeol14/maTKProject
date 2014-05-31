@@ -731,10 +731,11 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    p.addPoint(361, 354);
 	    p.addPoint(397, 360);
 	    roads.add(p);
-	    for(int i=0; i<1; i++)
+	    for(int i=0; i<10; i++)
 	    {
 	    	creepWave.add(new Creep(100, 0.4, 1, 10,i+4));
-		    creepWave.get(i).addPath(roads.get(i));
+	    	int tempInt = (int)(Math.random()*4);
+		    creepWave.get(i).addPath(roads.get(tempInt));
 	    }
 	}
 
