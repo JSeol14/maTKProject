@@ -39,14 +39,84 @@ public class Creep {
 	public boolean confuseHit = false;
 	public int confuseTimer = 0;
 	
-	public Creep(int hp, double spd, int damage, int gold, int t)
+	public Creep(int t)
 	{
-		maxHp = hp;
-		curHp = hp;
-		speed = spd;
-		dmg = damage;
-		goldNum = gold;
 		type = t;
+		switch(type)
+		{
+		case 1: 			
+			maxHp = 30;
+			curHp = maxHp;
+			speed = 0.4;
+			dmg = 1;
+			goldNum = 10;
+			break;
+		case 2: 
+			maxHp = 35;
+			curHp = maxHp;
+			speed = 0.45;
+			dmg = 1;
+			goldNum = 12;
+			break;
+		case 3:
+			maxHp = 20;
+			curHp = maxHp;
+			speed = 0.6;
+			dmg = 1;
+			goldNum = 5;
+			break;
+		case 4:
+			maxHp = 45;
+			curHp = maxHp;
+			speed = 0.25;
+			dmg = 3;
+			goldNum = 10;
+			break;
+		case 5:
+			maxHp = 40;
+			curHp = maxHp;
+			speed = 0.5;
+			dmg = 3;
+			goldNum = 15;
+			break;
+		case 6:
+			maxHp = 55;
+			curHp = maxHp;
+			speed = 0.45;
+			dmg = 5;
+			goldNum = 25;
+			break;
+		case 7:
+			maxHp = 50;
+			curHp = maxHp;
+			speed = 0.6;
+			dmg = 3;
+			goldNum = 25;
+			break;
+		case 8:
+			maxHp = 40;
+			curHp = maxHp;
+			speed = 0.65;
+			dmg = 1;
+			goldNum = 15;
+			break;
+		case 9:
+			maxHp = 60;
+			curHp = maxHp;
+			speed = 0.4;
+			dmg = 1;
+			goldNum = 10;
+			break;
+		case 10:
+			break;
+		default:
+			maxHp = 30;
+			curHp = maxHp;
+			speed = 0.55;
+			dmg = 5;
+			goldNum = 40;
+			break;
+		}
 		isAlive = true;
 	}
 	

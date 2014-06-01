@@ -527,11 +527,19 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    	if(tempCreep.isAlive == false)
 	    	{
 	    		creepWave.remove(i);
-		    	Creep testCreep = new Creep(100, 0.4, 1, 10,(int)(Math.random()*10));
+		    	Creep testCreep = new Creep(1);
 		    	testCreep.addPath(roads.get((int)(Math.random()*4)));
 		    	creepWave.add(testCreep);
 	    	}
 	    }
+	}
+	public int randomCreepType()
+	{
+		int typeNumber = -1;
+		
+		
+		
+		return typeNumber;
 	}
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
@@ -733,9 +741,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    roads.add(p);
 	    for(int i=0; i<10; i++)
 	    {
-	    	creepWave.add(new Creep(100, 0.4, 1, 10,i+4));
+	    	creepWave.add(new Creep(1));
 	    	int tempInt = (int)(Math.random()*4);
-		    creepWave.get(i).addPath(roads.get(tempInt));
+		    creepWave.get(i).addPath(roads.get(tempInt));//randomly selects one of four paths for the creep
 	    }
 	}
 
