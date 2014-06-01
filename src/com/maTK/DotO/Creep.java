@@ -47,67 +47,72 @@ public class Creep {
 		case 1: 			
 			maxHp = 30;
 			curHp = maxHp;
-			speed = 0.4;
+			speed = 0.2;
 			dmg = 1;
 			goldNum = 10;
 			break;
 		case 2: 
 			maxHp = 35;
 			curHp = maxHp;
-			speed = 0.45;
+			speed = 0.25;
 			dmg = 1;
-			goldNum = 12;
+			goldNum = 15;
 			break;
 		case 3:
-			maxHp = 20;
+			maxHp = 15;
 			curHp = maxHp;
-			speed = 0.6;
+			speed = 0.5;
 			dmg = 1;
 			goldNum = 5;
 			break;
 		case 4:
-			maxHp = 45;
+			maxHp = 55;
 			curHp = maxHp;
-			speed = 0.25;
-			dmg = 3;
-			goldNum = 10;
+			speed = 0.125;
+			dmg = 5;
+			goldNum = 20;
 			break;
 		case 5:
-			maxHp = 40;
+			maxHp = 30;
 			curHp = maxHp;
-			speed = 0.5;
+			speed = 0.4;
 			dmg = 3;
 			goldNum = 15;
 			break;
 		case 6:
-			maxHp = 55;
+			maxHp = 50;
 			curHp = maxHp;
-			speed = 0.45;
-			dmg = 5;
+			speed = 0.35;
+			dmg = 8;
 			goldNum = 25;
 			break;
 		case 7:
-			maxHp = 50;
-			curHp = maxHp;
-			speed = 0.6;
-			dmg = 3;
-			goldNum = 25;
-			break;
-		case 8:
 			maxHp = 40;
 			curHp = maxHp;
-			speed = 0.65;
-			dmg = 1;
+			speed = 0.5;
+			dmg = 3;
+			goldNum = 20;
+			break;
+		case 8:
+			maxHp = 30;
+			curHp = maxHp;
+			speed = 0.60;
+			dmg = 2;
 			goldNum = 15;
 			break;
 		case 9:
-			maxHp = 60;
+			maxHp = 55;
 			curHp = maxHp;
-			speed = 0.4;
-			dmg = 1;
-			goldNum = 10;
+			speed = 0.5;
+			dmg = 8;
+			goldNum = 18;
 			break;
 		case 10:
+			maxHp = 75;
+			curHp = maxHp;
+			speed = 0.5;
+			dmg = 8;
+			goldNum = 30;
 			break;
 		default:
 			maxHp = 30;
