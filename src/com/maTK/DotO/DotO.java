@@ -610,6 +610,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         		if(towerRec[i].contains(pointClicked))
         		{
         			placeTower = new Tower(xvar,yvar,i,1, 300, 5, 100);
+        			selected = true;
+        			selectTower = placeTower;
                 	recSelected = i;
         		}
         	}
