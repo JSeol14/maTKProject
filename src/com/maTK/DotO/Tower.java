@@ -59,8 +59,8 @@ public class Tower {
 	{
 		level++;
 		damage = 2*level;//5+level;
-		upPrice = price+(2^(level-1));//Gives price of upgrade to next level
-		sellPrice = (int)(price+(2^(level-1)))/2;//Gives the value of the tower if sold
+		upPrice = (int) (price+(Math.pow(2,(level-1))));//Gives price of upgrade to next level
+		sellPrice = (int)(price+(Math.pow(2,(level-1))))/2;//Gives the value of the tower if sold
 		setEffects();
 	}
 	
@@ -102,7 +102,7 @@ public class Tower {
 				slowPercent = 1-0.12*level;
 				slowTime = 1500 + 400*level;
 				phrase1 = "Slow Amount: " + (int)((100-(slowPercent*100))) + "%";
-				phrase2 = "Slow Time: " + (int)(slowTime/1000);
+				phrase2 = "Slow Time: " + (double)((double)slowTime/1000);
 				range = 300;
 				damage = 2*level;
 				reloadCount = 200-5*level;
@@ -111,7 +111,7 @@ public class Tower {
 				freezeChance = 30;
 				freezeTime = 500*level;
 				phrase1 = "Freeze Chance: " + freezeChance + "%";
-				phrase2 = "Freeze Time: " + (int)(freezeTime/1000);
+				phrase2 = "Freeze Time: " + (double)((double)freezeTime/1000);
 				range = 300;
 				damage = 2*level;
 				reloadCount = 200-5*level;

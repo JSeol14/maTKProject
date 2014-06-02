@@ -12,16 +12,12 @@ import java.net.*;
 import java.util.ArrayList;
 /*
  * TO DO LIST
- * 
  * Make tower placement limitations.
  * Add Instructions page
  * Add description for each tower (Splash isn't very self-explanatory)
- * Add Game Over or some sort of device after Origin is dead
  * Add Error messages (such as if there isn't enough money to upgrade or there isn't enough money to place tower)
  * Add Message as to how much a tower is to place
- * Tower upgrade pricing is wrong (it goes from 7 to 8 to 5)
  * Creep type 5 is unbearably slow for no reason
- * Sometimes no creeps are drawn
  */
 public class DotO extends JPanel implements MouseListener, MouseMotionListener, Runnable {
 
@@ -46,6 +42,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private String upImagePath = "resources/UpButton.png";
 	
 	private boolean gameStarted = false;
+	private boolean gameOver = false;
+	private int kills = 0;
 	
 	private static int towerSizeX; 
 	private static int towerSizeY;
@@ -168,7 +166,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					gold++;
 				}
 				repaint();
-				doStuff();
+				if(!gameOver)
+				{
+					doStuff();
+				}
 				thread.sleep(DELAY);
 				//System.out.println(originHP);
 			} catch (InterruptedException e) {
@@ -247,7 +248,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			g.drawImage(openingScreenImage, 0,0,w,h,this);
 		}
 		
-		if(gameStarted)
+		if(gameStarted && !gameOver)
 		{
 			g.drawImage(backgroundImage, 0, 0, w, h, this);
 
@@ -438,6 +439,11 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 				upgradeRec = new Rectangle(0,0,0,0);
 				if(selectTower.level<5)
 				{
+					Tower selectTower2 = new Tower(selectTower.xpos, selectTower.ypos, selectTower.type);
+					for(int i=0; i<selectTower.level; i++)
+					{
+						selectTower2.upgrade();
+					}
 					tempXpos = 980;
 					tempYpos = 520;
 					g.drawImage(towerSpriteImage, (int)(tempXpos*scaleX)-towerSizeX/2, (int)(tempYpos*scaleY)-towerSizeY/2, (int)(tempXpos*scaleX)+towerSizeX/2,(int)(tempYpos*scaleY)+towerSizeY/2, SPRITEX*selectTower.level, selectTower.type*SPRITEY, SPRITEX*(selectTower.level+1), (selectTower.type+1)*SPRITEY,this);
@@ -447,13 +453,13 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					tempYpos = 530;
 					g.drawString("Next Level", (int)(tempXpos*scaleX), (int) (tempYpos*scaleY));
 					g.setFont(customFont18);
-					g.drawString("Level: " + selectTower.level, (int)(950*scaleX), (int) (565*scaleY));
-					g.drawString("Damage: " + selectTower.damage, (int)(950*scaleX), (int) (585*scaleY));
-					g.drawString("Range: " + selectTower.range, (int)(950*scaleX), (int) (605*scaleY));
-					g.drawString(selectTower.phrase1, (int)(1070*scaleX), (int) (565*scaleY));
-					if(selectTower.phrase2 != null)
+					g.drawString("Level: " + selectTower2.level, (int)(950*scaleX), (int) (565*scaleY));
+					g.drawString("Damage: " + selectTower2.damage, (int)(950*scaleX), (int) (585*scaleY));
+					g.drawString("Range: " + selectTower2.range, (int)(950*scaleX), (int) (605*scaleY));
+					g.drawString(selectTower2.phrase1, (int)(1070*scaleX), (int) (565*scaleY));
+					if(selectTower2.phrase2 != null)
 					{
-						g.drawString(selectTower.phrase2, (int)(1070*scaleX), (int) (585*scaleY));
+						g.drawString(selectTower2.phrase2, (int)(1070*scaleX), (int) (585*scaleY));
 					}				
 					tempXpos = 1100;
 					tempYpos = 635;
@@ -461,8 +467,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					g.drawImage(upImage, (int)(tempXpos*scaleX)-(int)(210/2*scaleX), (int)(tempYpos*scaleY)-(int)(51/2*scaleY), (int)(tempXpos*scaleX)+(int)(210/2*scaleX),(int)(tempYpos*scaleY)+(int)(51/2*scaleY), 0, 0, 438, 106,this);
 					g.setFont(customFont28);
 					g.setColor(Color.white);
-					adjust = (int)Math.log10(selectTower.upPrice + 1);
-					g.drawString("Upgrade " + selectTower.upPrice + "g", (int)((1025 - (int)((double)(adjust)*7.5))*scaleX), (int)(643*scaleY));
+					adjust = (int)Math.log10(selectTower2.upPrice + 1);
+					g.drawString("Upgrade " + selectTower2.upPrice + "g", (int)((1025 - (int)((double)(adjust)*7.5))*scaleX), (int)(643*scaleY));
 				}
 			}					
 			int adjust = (int)Math.log10(gold + 1);
@@ -480,6 +486,15 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			g.setColor(Color.green);
 			g.fillRect((int)(tempXpos*w)-(int)((double)40/SIZEX*w), (int)(tempYpos*h)-(int)((double)50/SIZEY*h), (int)((double)800/SIZEX*w*(double)originHP/(double)originMaxHP), (int)((double)30/SIZEY*h));
 		    counter++;	
+		}
+		else if(gameOver)
+		{
+			g.setColor(Color.black);
+			g.fillRect(0, 0, w, h);
+			g.setColor(Color.white);
+			g.setFont(customFont36);
+			g.drawString("Game Over", w/2 - 100, h/2);
+			g.drawString("You killed " + kills + " bugs", w/2 - 170, h/2 + 50);
 		}
 	}
 	
@@ -569,12 +584,16 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    	Creep tempCreep = creepWave.get(i);
 	    	if(tempCreep.isAlive == false)
 	    	{
-	    		gold+=tempCreep.goldNum;
+	    		if(!tempCreep.reachOrigin)
+	    		{
+	    			kills++;
+	    			gold+=tempCreep.goldNum;
+		    		creepScaler+=2;
+	    		}
 	    		creepWave.remove(i);
-	    		creepScaler+=2;
     			if(creepScaler==4||creepScaler==10||creepScaler==16||creepScaler==20||creepScaler==40||creepScaler==52||creepScaler==68||creepScaler==100||creepScaler==112||creepScaler==140||creepScaler==160||creepScaler==200)
     			{
-    				System.out.println("creepScaler:"+creepScaler);
+    				//System.out.println("creepScaler:"+creepScaler);
     				Creep testCreep = new Creep(randomCreepType());
     		    	testCreep.addPath(roads.get((int)(Math.random()*4)));
     		    	creepWave.add(testCreep);
@@ -583,6 +602,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		    	testCreep.addPath(roads.get((int)(Math.random()*4)));
 		    	creepWave.add(testCreep);
 	    	}
+	    }
+	    if(originHP<=0)
+	    {
+	    	gameOver = true;
 	    }
 	}
 	public int randomCreepType()

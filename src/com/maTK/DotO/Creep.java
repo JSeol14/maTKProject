@@ -38,6 +38,7 @@ public class Creep {
 	public boolean confused = false;
 	public boolean confuseHit = false;
 	public int confuseTimer = 0;
+	public boolean reachOrigin = false;
 	
 	public Creep(int t)
 	{
@@ -176,6 +177,7 @@ public class Creep {
 			}
 			else
 			{
+				reachOrigin = true;
 				return true;//reached last point
 			}
 		}
