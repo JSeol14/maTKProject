@@ -10,7 +10,19 @@ import java.awt.event.MouseMotionListener;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-
+/*
+ * TO DO LIST
+ * 
+ * Make tower placement limitations.
+ * Add Instructions page
+ * Add description for each tower (Splash isn't very self-explanatory)
+ * Add Game Over or some sort of device after Origin is dead
+ * Add Error messages (such as if there isn't enough money to upgrade or there isn't enough money to place tower)
+ * Add Message as to how much a tower is to place
+ * Tower upgrade pricing is wrong (it goes from 7 to 8 to 5)
+ * Creep type 5 is unbearably slow for no reason
+ * Sometimes no creeps are drawn
+ */
 public class DotO extends JPanel implements MouseListener, MouseMotionListener, Runnable {
 
 	private final static int SIZEX = 1280;//X size of screen
@@ -560,6 +572,13 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    		gold+=tempCreep.goldNum;
 	    		creepWave.remove(i);
 	    		creepScaler+=2;
+    			if(creepScaler==4||creepScaler==10||creepScaler==16||creepScaler==20||creepScaler==40||creepScaler==52||creepScaler==68||creepScaler==100||creepScaler==112||creepScaler==140||creepScaler==160||creepScaler==200)
+    			{
+    				System.out.println("creepScaler:"+creepScaler);
+    				Creep testCreep = new Creep(randomCreepType());
+    		    	testCreep.addPath(roads.get((int)(Math.random()*4)));
+    		    	creepWave.add(testCreep);
+    			}
 		    	Creep testCreep = new Creep(randomCreepType());
 		    	testCreep.addPath(roads.get((int)(Math.random()*4)));
 		    	creepWave.add(testCreep);
@@ -578,8 +597,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 		if(creepScaler>100)
 		{
-			creepScaler = 100;
-			tempNumber+=creepScaler;
+			tempNumber+=100;
 		}
 		if(typeNumber==-1&&tempNumber<40)
 		{
@@ -722,7 +740,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
             			currentRecs.remove(selNum);
             			selected = false;
             		} 
-            		if(upgradeRec.contains(pointClicked))
+            		if(upgradeRec.contains(pointClicked)&&gold>=selectTower.upPrice)
             		{
             			gold -= selectTower.upPrice;
             			selectTower.upgrade();

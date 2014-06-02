@@ -45,8 +45,8 @@ public class Tower {
 		isAlive = true;
 		reloadTime = 100;
 		reloadCount = reloadTime;
-		upPrice = price+(2^level);//Gives price of upgrade to next level
-		sellPrice = (int)(price+(2^level-1))/2;//Gives the value of the tower if sold
+		upPrice = price+(2^(level-1));//Gives price of upgrade to next level
+		sellPrice = (int)(price+(2^(level-1)))/2;//Gives the value of the tower if sold
 		setEffects();
 	}
 	
@@ -59,8 +59,8 @@ public class Tower {
 	{
 		level++;
 		damage = 2*level;//5+level;
-		upPrice = price+(2^level);//Gives price of upgrade to next level
-		sellPrice = (int)(price+(2^level-1))/2;//Gives the value of the tower if sold
+		upPrice = price+(2^(level-1));//Gives price of upgrade to next level
+		sellPrice = (int)(price+(2^(level-1)))/2;//Gives the value of the tower if sold
 		setEffects();
 	}
 	
