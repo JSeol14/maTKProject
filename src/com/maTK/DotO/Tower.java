@@ -21,6 +21,7 @@ public class Tower {
 	public String phrase1;
 	public String phrase2;
 	
+	public static int price = 5;//cost to buy initial tower
 	public int splashRadius = 1;//radius of projectile splash, default hits only target, splash has much less dmg
 	public int extraGold = 0;//extra gold from creep kill
 	public int extraRange = 0;//extra range of tower
@@ -30,15 +31,13 @@ public class Tower {
 	public int slowTime = 0;//duration of slow
 	public int freezeChance = 0;//percent chance of freeze (0-100)
 	public int freezeTime = 0;//duration of freeze
-	//reloadTime serves for rapid tower
+	//reloadTime serves for rapid tower	
 	public int trueSightRange = 0;//range of tower true sight
 	public int confusionChance = 0;//chance of confusing creep
 	public int confusionTime = 0;//duration of confusion
 	
 	public Tower (int initX, int initY, int t)
 	{
-		upPrice = 1;
-		sellPrice = 1;
 		xpos = initX;
 		ypos = initY;
 		type = t;
@@ -46,6 +45,8 @@ public class Tower {
 		isAlive = true;
 		reloadTime = 100;
 		reloadCount = reloadTime;
+		upPrice = price+(2^level);//Gives price of upgrade to next level
+		sellPrice = (int)(price+(2^level-1))/2;//Gives the value of the tower if sold
 		setEffects();
 	}
 	
@@ -57,9 +58,9 @@ public class Tower {
 	public void upgrade()//Upgrades tower to next level
 	{
 		level++;
-		damage = 1;//5+level;
-		upPrice = level;//Gives price of upgrade to next level
-		sellPrice = level;//Gives the value of the tower if sold
+		damage = 2*level;//5+level;
+		upPrice = price+(2^level);//Gives price of upgrade to next level
+		sellPrice = (int)(price+(2^level-1))/2;//Gives the value of the tower if sold
 		setEffects();
 	}
 	
@@ -71,21 +72,22 @@ public class Tower {
 				splashRadius = 50*level;
 				phrase1 = "Splash Radius: " + splashRadius;
 				range = 300;
-				damage = 1*level;
-				reloadTime = 100;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 			case 1: typeString = "Gold";
 				extraGold = 50*level;
 				phrase1 = "Gold/Kill: " + extraGold;
 				range = 300;
-				damage = 1*level;
-				reloadTime = 100;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 			case 2: typeString = "Range";
 				extraRange = 70*level;
 				phrase1 = "Extra Range: " + extraRange;
 				range = 300+(50*level);
-				damage = 1*level;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 			case 3: typeString = "Poison";
 				poisonDmg = 1*level;//poison damage per second
@@ -93,8 +95,8 @@ public class Tower {
 				phrase1 = "Poison Dmg: " + poisonDmg;
 				phrase2 = "Poison Time: " + (int)(poisonTime/1000);
 				range = 300;
-				damage = 1*level;
-				reloadTime = 100;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 			case 4: typeString = "Slow";
 				slowPercent = 1-0.12*level;
@@ -102,8 +104,8 @@ public class Tower {
 				phrase1 = "Slow Amount: " + (int)((100-(slowPercent*100))) + "%";
 				phrase2 = "Slow Time: " + (int)(slowTime/1000);
 				range = 300;
-				damage = 1*level;
-				reloadTime = 100;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 			case 5: typeString = "Freeze";
 				freezeChance = 30;
@@ -111,21 +113,21 @@ public class Tower {
 				phrase1 = "Freeze Chance: " + freezeChance + "%";
 				phrase2 = "Freeze Time: " + (int)(freezeTime/1000);
 				range = 300;
-				damage = 1*level;
-				reloadTime = 100;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 			case 6: typeString = "Rapid"; 
-				reloadCount = 100-10*level;
+				reloadCount = 150-20*level;
 				phrase1 = "Reload Time: " + (double)reloadCount/1000;
 				range = 300;
-				damage = 1*level;
+				damage = 2*level;
 				break;
 			case 7: typeString = "Sight";
 				trueSightRange = 300+100*level;
 				phrase1 = "Sight Range: " + trueSightRange;
 				range = 300;
-				damage = 1*level;
-				reloadTime = 100;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 			case 8: typeString = "Dizzy";
 				confusionChance = 30;
@@ -133,8 +135,8 @@ public class Tower {
 				phrase1 = "Dizzy Chance: " + confusionChance + "%";
 				phrase2 = "Dizzy Time: " + (double)((double)confusionTime/(double)1000);
 				range = 300;
-				damage = 1*level;
-				reloadTime = 100;
+				damage = 2*level;
+				reloadCount = 200-5*level;
 				break;
 		}
 	}

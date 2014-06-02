@@ -20,7 +20,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private final static int SPRITEX = 100;
 	private final static int SPRITEY = 100;
 	private final static int DELAY = 5;
-	private final static int GOLDDELAY = 100;
+	private final static int GOLDDELAY = 500;
 	
 	private String backgroundPath = "resources/Background2.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
 	private String sideImagePath = "resources/SideBar.png";
@@ -42,11 +42,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private int creepScaler = 0;
 	private int goldScaler = 0;
 	private int score = 0;//In-game score
-	private int gold = 5;//Amount of gold currently in bank
+	private int gold = 10;//Amount of gold currently in bank
 	private int originHP = 100;
 	private int originMaxHP = 100;
 	private int recSelected = -1;
-	private int[] towerCost = new int[9];
 	
 	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();//The Array List of all the arrays of different projectiles
@@ -674,8 +673,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         
         if(gameStarted)
         {
-    		if(recSelected!=-1&&(xvar<TOWERX*w))
+    		if(recSelected!=-1&&(xvar<TOWERX*w)&&gold>=Tower.price)
     		{
+    			gold-=Tower.price;
     			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
     			recSelected = -1;
     		}
