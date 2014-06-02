@@ -44,6 +44,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private int score = 0;//In-game score
 	private int gold = 5;//Amount of gold currently in bank
 	private int originHP = 100;
+	private int originMaxHP = 100;
 	private int recSelected = -1;
 	private int[] towerCost = new int[9];
 	
@@ -446,7 +447,21 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					adjust = (int)Math.log10(selectTower.upPrice + 1);
 					g.drawString("Upgrade " + selectTower.upPrice + "g", (int)((1025 - (int)((double)(adjust)*7.5))*scaleX), (int)(643*scaleY));
 				}
-			}
+			}					
+			int adjust = (int)Math.log10(gold + 1);
+			double scaleX = (double)w/(double)SIZEX;
+			double scaleY = (double)h/(double)SIZEY;
+			g.setColor(Color.yellow);
+			g.setFont(customFont28);
+			g.drawString("Gold " + gold + "g", (int)((750 - (int)((double)(adjust)*7.5))*scaleX), (int)(70*scaleY));
+			double tempXpos = 110/(double)SIZEX;
+			double tempYpos = 60/(double)SIZEY;
+			g.setColor(Color.black);
+			g.fillRect((int)(tempXpos*w)-(int)((double)40/SIZEX*w)-3, (int)(tempYpos*h)-(int)((double)50/SIZEY*h)-3, (int)((double)800/SIZEX*w)+6, (int)((double)30/SIZEY*h)+6);
+			g.setColor(Color.red);
+			g.fillRect((int)(tempXpos*w)-(int)((double)40/SIZEX*w), (int)(tempYpos*h)-(int)((double)50/SIZEY*h), (int)((double)800/SIZEX*w), (int)((double)30/SIZEY*h));
+			g.setColor(Color.green);
+			g.fillRect((int)(tempXpos*w)-(int)((double)40/SIZEX*w), (int)(tempYpos*h)-(int)((double)50/SIZEY*h), (int)((double)800/SIZEX*w*(double)originHP/(double)originMaxHP), (int)((double)30/SIZEY*h));
 		    counter++;	
 		}
 	}
