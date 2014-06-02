@@ -68,7 +68,7 @@ public class Creep {
 		case 3:
 			maxHp = 65;
 			curHp = maxHp;
-			speed = 0.025;
+			speed = 0.225;
 			dmg = 5;
 			goldNum = 10;
 			break;
