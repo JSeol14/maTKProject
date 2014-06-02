@@ -41,7 +41,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private int counter=0;
 	private int creepScaler = 0;
 	private int goldScaler = 0;
-	private int score = 0;//In-game score
 	private int gold = 10;//Amount of gold currently in bank
 	private int originHP = 100;
 	private int originMaxHP = 100;
@@ -50,7 +49,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();//The Array List of all the arrays of different projectiles
 	private ArrayList<Tower> towers = new ArrayList<Tower>();//The Array List of all the towers active on the map
+	private ArrayList<Rectangle> currentRecs = new ArrayList<Rectangle>();//The Array List of rectangles of all active towers.
 	private ArrayList<Road> roads = new ArrayList<Road>();//The Array List  of all the paths on the map
+	
+	private Rectangle tempRec;//A placeholder for currentRecs
 	
 	private Tower tempTower;//A place holder for the towers we create for the vector "tower"
 	private Tower placeTower;//Potential tower during placing selection
@@ -70,7 +72,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private Font customFont36;
 	private Font customFont28;
 	private Font customFont72;
-	
 	
 	private Rectangle[] towerRec = new Rectangle[9];
 	
@@ -210,6 +211,8 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
 		if(gameStarted)
 		{
+			tempRec = new Rectangle(xpos,ypos,towerSizeX,towerSizeY);
+			currentRecs.add(tempRec);
 			tempTower = new Tower(xpos,ypos,type);//xpos, ypos, type, level, range, damage, reload Time
 			tempTower.setRec(xpos*w/SIZEX, ypos*h/SIZEY, towerSizeX, towerSizeY);
 			towers.add(tempTower);
@@ -242,6 +245,9 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 			
 			for(int i=0; i<towers.size();i++)
 			{
+				tempRec = currentRecs.get(i);
+				tempRec = new Rectangle(tempRec.x*w/SIZEX, tempRec.y*h/SIZEY, towerSizeX, towerSizeY);
+				currentRecs.add(i, tempRec);
 				tempTower = towers.get(i);
 				tempTower.setRec(tempTower.xpos*w/SIZEX, tempTower.ypos*h/SIZEY, towerSizeX, towerSizeY);
 				if(tempTower.isAlive)
@@ -675,9 +681,18 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         {
     		if(recSelected!=-1&&(xvar<TOWERX*w)&&gold>=Tower.price)
     		{
-    			gold-=Tower.price;
-    			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
-    			recSelected = -1;
+    			boolean interference = false;
+    			for(int i=0;i<currentRecs.size();i++)
+    			{
+    				if(currentRecs.get(i).contains(pointClicked))
+    					interference = true;
+    			}
+    			if(!interference)
+    			{
+	    			gold-=Tower.price;
+	    			createTower(recSelected,(int)(((double)pointClicked.x/(double)w)*(double)SIZEX),(int)(((double)pointClicked.y/(double)h)*(double)SIZEY));
+	    			recSelected = -1;
+    			}
     		}
     		else if(recSelected!=-1&&!(xvar<TOWERX*w - towerSizeX/2))
     		{
@@ -704,6 +719,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
             		{
             			gold += selectTower.sellPrice;
             			towers.remove(selNum);
+            			currentRecs.remove(selNum);
             			selected = false;
             		} 
             		if(upgradeRec.contains(pointClicked))
