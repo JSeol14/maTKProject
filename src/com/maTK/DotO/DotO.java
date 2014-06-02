@@ -601,43 +601,43 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		}
 		if(typeNumber==-1&&tempNumber<40)
 		{
-			typeNumber = 1;
+			typeNumber = 0;
 		}
 		if(typeNumber==-1&&tempNumber<50)
 		{
-			typeNumber = 2;
+			typeNumber = 1;
 		}
 		if(typeNumber==-1&&tempNumber<60)
 		{
-			typeNumber = 3;
+			typeNumber = 2;
 		}
 		if(typeNumber==-1&&tempNumber<70)
 		{
-			typeNumber = 4;
+			typeNumber = 3;
 		}
 		if(typeNumber==-1&&tempNumber<75)
 		{
-			typeNumber = 5;
+			typeNumber = 4;
 		}
 		if(typeNumber==-1&&tempNumber<95)
 		{
-			typeNumber = 6;
+			typeNumber = 5;
 		}
 		if(typeNumber==-1&&tempNumber<110)
 		{
-			typeNumber = 7;
+			typeNumber = 6;
 		}
 		if(typeNumber==-1&&tempNumber<125)
 		{
-			typeNumber = 8;
+			typeNumber = 7;
 		}
 		if(typeNumber==-1&&tempNumber<140)
 		{
-			typeNumber = 9;
+			typeNumber = 8;
 		}
 		if(typeNumber==-1&&tempNumber<150)
 		{
-			typeNumber = 10;
+			typeNumber = 9;
 		}
 		
 		return typeNumber;
@@ -856,7 +856,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    for(int i=0; i<4; i++)
 	    {
 	    	int tempInt = (int)(Math.random()*10);
-	    	creepWave.add(new Creep(1));
+	    	creepWave.add(new Creep(0));
 		    creepWave.get(i).addPath(roads.get(i));
 
 		    /*

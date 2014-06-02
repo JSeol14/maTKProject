@@ -44,70 +44,70 @@ public class Creep {
 		type = t;
 		switch(type)
 		{
-		case 1: 			
+		case 0: 			
 			maxHp = 30;
 			curHp = maxHp;
 			speed = 0.1;
 			dmg = 1;
 			goldNum = 3;
 			break;
-		case 2: 
+		case 1: 
 			maxHp = 35;
 			curHp = maxHp;
 			speed = 0.15;
 			dmg = 1;
 			goldNum = 7;
 			break;
-		case 3:
+		case 2:
 			maxHp = 20;
 			curHp = maxHp;
 			speed = 0.4;
 			dmg = 1;
 			goldNum = 2;
 			break;
-		case 4:
+		case 3:
 			maxHp = 65;
 			curHp = maxHp;
 			speed = 0.025;
 			dmg = 5;
 			goldNum = 10;
 			break;
-		case 5:
+		case 4:
 			maxHp = 40;
 			curHp = maxHp;
 			speed = 0.4;
 			dmg = 3;
 			goldNum = 8;
 			break;
-		case 6:
+		case 5:
 			maxHp = 65;
 			curHp = maxHp;
 			speed = 0.25;
 			dmg = 8;
 			goldNum = 15;
 			break;
-		case 7:
+		case 6:
 			maxHp = 55;
 			curHp = maxHp;
 			speed = 0.4;
 			dmg = 3;
 			goldNum = 12;
 			break;
-		case 8:
+		case 7:
 			maxHp = 45;
 			curHp = maxHp;
 			speed = 0.50;
 			dmg = 2;
 			goldNum = 8;
 			break;
-		case 9:
+		case 8:
 			maxHp = 75;
 			curHp = maxHp;
 			speed = 0.4;
 			dmg = 8;
 			goldNum = 13;
 			break;
-		case 10:
+		case 9:
 			maxHp = 95;
 			curHp = maxHp;
 			speed = 0.4;
