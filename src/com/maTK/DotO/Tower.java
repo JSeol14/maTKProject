@@ -3,6 +3,7 @@ package com.maTK.DotO;
 import java.awt.Rectangle;
 
 public class Tower {
+	public final int RELOADSCALE = 10;
 	public int level;//corresponds to number of edges/power - used in spreadsheet to get tower img
 	public int type;//corresponds to color/elemental attribute - used in spreadsheet to get tower img
 	public String typeString;//Name of type
@@ -34,18 +35,16 @@ public class Tower {
 	public int confusionChance = 0;//chance of confusing creep
 	public int confusionTime = 0;//duration of confusion
 	
-	public Tower (int initX, int initY, int t, int l, int r, int dmg, int rT)
+	public Tower (int initX, int initY, int t)
 	{
 		upPrice = 1;
 		sellPrice = 1;
 		xpos = initX;
 		ypos = initY;
 		type = t;
-		level = l;
-		range = r;
+		level = 1;
 		isAlive = true;
-		damage = dmg;
-		reloadTime = rT;
+		reloadTime = 100;
 		reloadCount = reloadTime;
 		setEffects();
 	}
@@ -71,47 +70,71 @@ public class Tower {
 			case 0: typeString = "Splash";
 				splashRadius = 50*level;
 				phrase1 = "Splash Radius: " + splashRadius;
+				range = 300;
+				damage = 1*level;
+				reloadTime = 100;
 				break;
 			case 1: typeString = "Gold";
 				extraGold = 50*level;
 				phrase1 = "Gold/Kill: " + extraGold;
+				range = 300;
+				damage = 1*level;
+				reloadTime = 100;
 				break;
 			case 2: typeString = "Range";
 				extraRange = 70*level;
-				range = 300 + extraRange;
 				phrase1 = "Extra Range: " + extraRange;
+				range = 300+(50*level);
+				damage = 1*level;
 				break;
 			case 3: typeString = "Poison";
 				poisonDmg = 1*level;//poison damage per second
 				poisonTime = 5000;//duration in milliseconds
 				phrase1 = "Poison Dmg: " + poisonDmg;
 				phrase2 = "Poison Time: " + (int)(poisonTime/1000);
+				range = 300;
+				damage = 1*level;
+				reloadTime = 100;
 				break;
 			case 4: typeString = "Slow";
 				slowPercent = 1-0.12*level;
 				slowTime = 1500 + 400*level;
 				phrase1 = "Slow Amount: " + (int)((100-(slowPercent*100))) + "%";
 				phrase2 = "Slow Time: " + (int)(slowTime/1000);
+				range = 300;
+				damage = 1*level;
+				reloadTime = 100;
 				break;
 			case 5: typeString = "Freeze";
 				freezeChance = 30;
 				freezeTime = 500*level;
 				phrase1 = "Freeze Chance: " + freezeChance + "%";
 				phrase2 = "Freeze Time: " + (int)(freezeTime/1000);
+				range = 300;
+				damage = 1*level;
+				reloadTime = 100;
 				break;
 			case 6: typeString = "Rapid"; 
 				reloadCount = 100-10*level;
 				phrase1 = "Reload Time: " + (double)reloadCount/1000;
+				range = 300;
+				damage = 1*level;
 				break;
 			case 7: typeString = "Sight";
 				trueSightRange = 300+100*level;
 				phrase1 = "Sight Range: " + trueSightRange;
+				range = 300;
+				damage = 1*level;
+				reloadTime = 100;
 				break;
 			case 8: typeString = "Dizzy";
 				confusionChance = 30;
 				confusionTime = 600*level;
 				phrase1 = "Dizzy Chance: " + confusionChance + "%";
 				phrase2 = "Dizzy Time: " + (double)((double)confusionTime/(double)1000);
+				range = 300;
+				damage = 1*level;
+				reloadTime = 100;
 				break;
 		}
 	}

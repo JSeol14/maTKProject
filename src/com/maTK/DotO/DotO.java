@@ -210,7 +210,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		towerSizeY = (int)((TOWERY*h)+((h-(TOWERY*h))/18)*(2)+((h-(TOWERY*h))/36)) - (int)((TOWERY*h)+((h-(TOWERY*h))/36));
 		if(gameStarted)
 		{
-			tempTower = new Tower(xpos,ypos,type,1, 300, 5, 100);//xpos, ypos, type, level, range, damage, reload Time
+			tempTower = new Tower(xpos,ypos,type);//xpos, ypos, type, level, range, damage, reload Time
 			tempTower.setRec(xpos*w/SIZEX, ypos*h/SIZEY, towerSizeX, towerSizeY);
 			towers.add(tempTower);
 			//System.out.println("Tower added at x: "+xpos+", y:"+ypos);
@@ -672,7 +672,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
         	{
         		if(towerRec[i].contains(pointClicked))
         		{
-        			placeTower = new Tower(xvar,yvar,i,1, 300, 5, 100);
+        			placeTower = new Tower(xvar,yvar,i);
         			selected = true;
         			selectTower = placeTower;
                 	recSelected = i;
