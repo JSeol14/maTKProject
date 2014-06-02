@@ -45,10 +45,13 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private int gold = 5;//Amount of gold currently in bank
 	private int originHP = 100;
 	private int recSelected = -1;
+	private int[] towerCost = new int[9];
+	
 	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();//The Array List of all the arrays of different projectiles
 	private ArrayList<Tower> towers = new ArrayList<Tower>();//The Array List of all the towers active on the map
 	private ArrayList<Road> roads = new ArrayList<Road>();//The Array List  of all the paths on the map
+	
 	private Tower tempTower;//A place holder for the towers we create for the vector "tower"
 	private Tower placeTower;//Potential tower during placing selection
 	
