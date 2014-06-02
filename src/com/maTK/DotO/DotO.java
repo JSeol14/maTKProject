@@ -20,6 +20,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private final static int SPRITEX = 100;
 	private final static int SPRITEY = 100;
 	private final static int DELAY = 5;
+	private final static int GOLDDELAY = 100;
 	
 	private String backgroundPath = "resources/Background2.png";//Path to the background picture (the distance from the far left to the tower menu is 924 pixels.)
 	private String sideImagePath = "resources/SideBar.png";
@@ -37,10 +38,12 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private static int towerSizeX; 
 	private static int towerSizeY;
 	
+	private int counter=0;
+	private int creepScaler = 0;
+	private int goldScaler = 0;
 	private int score = 0;//In-game score
-	private int gold = 1000000000;//Amount of gold currently in bank
-	private int waveNum;//Counter of which wave the player is facing
-	private int originHP = 100;//HP of the origin
+	private int gold = 5;//Amount of gold currently in bank
+	private int originHP = 100;
 	private int recSelected = -1;
 	private ArrayList<Creep> creepWave = new ArrayList<Creep>();//The Array List of all the arrays of different creeps there will be per wave
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();//The Array List of all the arrays of different projectiles
@@ -65,7 +68,6 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	private Font customFont28;
 	private Font customFont72;
 	
-	private int counter=0;
 	
 	private Rectangle[] towerRec = new Rectangle[9];
 	
@@ -143,6 +145,12 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		while(true)
 		{
 			try {
+				goldScaler++;
+				if(goldScaler==GOLDDELAY)
+				{
+					goldScaler = 0;
+					gold++;
+				}
 				repaint();
 				doStuff();
 				thread.sleep(DELAY);
@@ -526,8 +534,10 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	    	Creep tempCreep = creepWave.get(i);
 	    	if(tempCreep.isAlive == false)
 	    	{
+	    		gold+=tempCreep.goldNum;
 	    		creepWave.remove(i);
-		    	Creep testCreep = new Creep(1);
+	    		creepScaler+=2;
+		    	Creep testCreep = new Creep(randomCreepType());
 		    	testCreep.addPath(roads.get((int)(Math.random()*4)));
 		    	creepWave.add(testCreep);
 	    	}
@@ -536,8 +546,58 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 	public int randomCreepType()
 	{
 		int typeNumber = -1;
+		int tempNumber = -1;
 		
-		
+		tempNumber = (int) (Math.random()*50);
+		if(creepScaler<=100)
+		{
+			tempNumber+=creepScaler;
+		}
+		if(creepScaler>100)
+		{
+			creepScaler = 100;
+			tempNumber+=creepScaler;
+		}
+		if(typeNumber==-1&&tempNumber<40)
+		{
+			typeNumber = 1;
+		}
+		if(typeNumber==-1&&tempNumber<50)
+		{
+			typeNumber = 2;
+		}
+		if(typeNumber==-1&&tempNumber<60)
+		{
+			typeNumber = 3;
+		}
+		if(typeNumber==-1&&tempNumber<70)
+		{
+			typeNumber = 4;
+		}
+		if(typeNumber==-1&&tempNumber<75)
+		{
+			typeNumber = 5;
+		}
+		if(typeNumber==-1&&tempNumber<95)
+		{
+			typeNumber = 6;
+		}
+		if(typeNumber==-1&&tempNumber<110)
+		{
+			typeNumber = 7;
+		}
+		if(typeNumber==-1&&tempNumber<125)
+		{
+			typeNumber = 8;
+		}
+		if(typeNumber==-1&&tempNumber<140)
+		{
+			typeNumber = 9;
+		}
+		if(typeNumber==-1&&tempNumber<150)
+		{
+			typeNumber = 10;
+		}
 		
 		return typeNumber;
 	}
@@ -663,7 +723,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 	private void initRoads()
 	{
 		//TOP
