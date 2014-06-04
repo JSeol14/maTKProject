@@ -166,7 +166,7 @@ public class DotO extends JPanel implements MouseListener, MouseMotionListener, 
 					gold++;
 				}
 				repaint();
-				if(!gameOver)
+				if(gameStarted && !gameOver)
 				{
 					doStuff();
 				}
